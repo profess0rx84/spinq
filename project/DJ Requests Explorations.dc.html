@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#111114;font-family:'Space Grotesk',system-ui,sans-serif}
+a{color:#c8f542}a:hover{color:#e2ff7a}
+.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(255,255,255,.08);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#c8f542;color:#0a0a0c;border-radius:4px;text-decoration:none}
+.dv-tname{font:600 13px/1.2 'Space Grotesk',sans-serif;color:#f2f2ef}
+.dv-opts{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(255,255,255,.12);color:#f2f2ef;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 'Space Grotesk',sans-serif;color:rgba(255,255,255,.55)}
+.dv-card{max-width:100%;overflow:hidden}
+.dv-opt:target .dv-oid{background:#c8f542;color:#0a0a0c}
+.dv-next{margin:22px 0 0;font:12px/1.5 'Space Grotesk',sans-serif;color:rgba(255,255,255,.5)}
+.dv-notes{max-width:760px;margin:0 0 24px;font:13px/1.6 'Space Grotesk',sans-serif;color:rgba(255,255,255,.6)}
+.dv-notes strong{color:#f2f2ef;font-weight:600}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t3">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Name explorations — replacing the SPINQ placeholder</span></div>
+<p class="dv-notes">Six directions, each as a wordmark card in the same dark/neon system. From by-the-book to more out there: functional (<a class="dv-oid" href="#3a">3a</a>, <a class="dv-oid" href="#3b">3b</a>), club vocabulary (<a class="dv-oid" href="#3c">3c</a>, <a class="dv-oid" href="#3d">3d</a>), and more playful (<a class="dv-oid" href="#3e">3e</a>, <a class="dv-oid" href="#3f">3f</a>).</p>
+<div class="dv-opts">
+
+<div class="dv-opt" id="3a">
+<div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>REQST — stripped, functional</div>
+<div class="dv-card" style="width:440px">
+  <div style="width:440px;height:240px;background:#0a0a0c;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:0 40px;box-sizing:border-box">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:46px;font-weight:700;letter-spacing:.1em;color:#f2f2ef">REQ<span style="color:#c8f542">ST</span></div>
+    <div style="font-size:14px;color:rgba(255,255,255,.5);font-family:'Space Grotesk',sans-serif">The request line, minus the shouting.</div>
+    <div style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.35)">reqst.live</div>
+  </div>
+</div>
+</div>
+
+<div class="dv-opt" id="3b">
+<div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>ON DECK — what's next, DJ slang</div>
+<div class="dv-card" style="width:440px">
+  <div style="width:440px;height:240px;background:#0a0a0c;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:0 40px;box-sizing:border-box">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:46px;font-weight:700;letter-spacing:-.01em;color:#f2f2ef">on<span style="color:#c8f542">deck</span></div>
+    <div style="font-size:14px;color:rgba(255,255,255,.5);font-family:'Space Grotesk',sans-serif">Get your song on deck.</div>
+    <div style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.35)">ondeck.dj</div>
+  </div>
+</div>
+</div>
+
+<div class="dv-opt" id="3c">
+<div class="dv-olabel"><a class="dv-oid" href="#3c">3c</a>DROPLINE — the drop + the request line</div>
+<div class="dv-card" style="width:440px">
+  <div style="width:440px;height:240px;background:#0a0a0c;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:0 40px;box-sizing:border-box">
+    <div style="display:flex;align-items:center;gap:14px">
+      <div style="width:12px;height:36px;background:#c8f542;border-radius:2px"></div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:46px;font-weight:700;letter-spacing:-.01em;color:#f2f2ef">Dropline</div>
+    </div>
+    <div style="font-size:14px;color:rgba(255,255,255,.5);font-family:'Space Grotesk',sans-serif">Drop a line to the booth.</div>
+    <div style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.35)">dropline.live</div>
+  </div>
+</div>
+</div>
+
+<div class="dv-opt" id="3d">
+<div class="dv-olabel"><a class="dv-oid" href="#3d">3d</a>CRATE — digging the crates, together</div>
+<div class="dv-card" style="width:440px">
+  <div style="width:440px;height:240px;background:#0a0a0c;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:0 40px;box-sizing:border-box">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:46px;font-weight:700;letter-spacing:.16em;color:#f2f2ef;border:3px solid #c8f542;padding:2px 18px;align-self:flex-start">CRATE</div>
+    <div style="font-size:14px;color:rgba(255,255,255,.5);font-family:'Space Grotesk',sans-serif">The whole room digs the crates.</div>
+    <div style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.35)">crate.fm</div>
+  </div>
+</div>
+</div>
+
+<div class="dv-opt" id="3e">
+<div class="dv-olabel"><a class="dv-oid" href="#3e">3e</a>ENCORE — the crowd asks, the DJ delivers</div>
+<div class="dv-card" style="width:440px">
+  <div style="width:440px;height:240px;background:#0a0a0c;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:0 40px;box-sizing:border-box">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:46px;font-weight:400;letter-spacing:.02em;color:#f2f2ef;font-style:italic">encore<span style="color:#c8f542;font-style:normal;font-weight:700">!</span></div>
+    <div style="font-size:14px;color:rgba(255,255,255,.5);font-family:'Space Grotesk',sans-serif">Ask for one more.</div>
+    <div style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.35)">encore.club</div>
+  </div>
+</div>
+</div>
+
+<div class="dv-opt" id="3f">
+<div class="dv-olabel"><a class="dv-oid" href="#3f">3f</a>SHOUT — a shout-out to the booth</div>
+<div class="dv-card" style="width:440px">
+  <div style="width:440px;height:240px;background:#c8f542;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:0 40px;box-sizing:border-box">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:52px;font-weight:700;letter-spacing:.04em;color:#0a0a0c">SHOUT<span style="opacity:.35">.</span></div>
+    <div style="font-size:14px;color:rgba(10,10,12,.65);font-family:'Space Grotesk',sans-serif">Your song. Your shout. No yelling over the booth.</div>
+    <div style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(10,10,12,.5)">shout.dj</div>
+  </div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: "apply <a class="dv-oid" href="#3c">3c</a> across all the screens" · "more names like <a class="dv-oid" href="#3b">3b</a>" · "show <a class="dv-oid" href="#3f">3f</a> on the big screen"</p>
+</section>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">DJ login, live/offline control, tip-free public surfaces</span></div>
+<p class="dv-notes"><strong>Changes:</strong> tips are now <strong>DJ-only</strong> — they appear in the booth (<a class="dv-oid" href="#2b">2b</a>) but never on the big screen (<a class="dv-oid" href="#2c">2c</a>) or guest queue. The DJ signs in (<a class="dv-oid" href="#2a">2a</a>) and flips requests <strong>Live / Offline</strong> from the booth header; when offline, the big screen tells guests requests are closed (<a class="dv-oid" href="#2d">2d</a>).</p>
+<div class="dv-opts">
+
+<!-- 2a DJ login -->
+<div class="dv-opt" id="2a">
+<div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>DJ · sign in (desktop)</div>
+<div class="dv-card">
+<x-import component-from-global-scope="ChromeWindow" from="./browser-window.jsx" width="{{ 760 }}" height="{{ 560 }}" url="spinq.live/booth" hint-size="760px,560px">
+  <div style="display:flex;align-items:center;justify-content:center;height:100%;background:#0a0a0c;color:#f2f2ef;font-family:'Space Grotesk',system-ui,sans-serif">
+    <div style="width:340px;display:flex;flex-direction:column;gap:22px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:24px;font-weight:700;letter-spacing:.04em">SPINQ <span style="color:rgba(255,255,255,.4);font-weight:400">Booth</span></div>
+        <div style="font-size:13.5px;color:rgba(255,255,255,.55)">Sign in to run requests for your night.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="padding:13px 14px;background:#16161a;border-radius:12px;font-size:14px;color:rgba(255,255,255,.85)">nova@spinq.live</div>
+        <div style="padding:13px 14px;background:#16161a;border-radius:12px;font-size:14px;color:rgba(255,255,255,.4);letter-spacing:3px">••••••••••</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="text-align:center;padding:14px 0;border-radius:12px;background:#c8f542;color:#0a0a0c;font-size:15px;font-weight:700">Sign in</div>
+        <div style="text-align:center;font-size:12.5px;color:rgba(255,255,255,.4)">Forgot password? · New here? Create a booth</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:#16161a;border-radius:12px;font-size:12.5px;color:rgba(255,255,255,.55)">
+        <div style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3)"></div>
+        Requests stay offline until you go live.
+      </div>
+    </div>
+  </div>
+</x-import>
+</div>
+</div>
+
+<!-- 2b Booth with live/offline toggle -->
+<div class="dv-opt" id="2b">
+<div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>DJ · booth with Live/Offline switch — tips visible only here</div>
+<div class="dv-card">
+<x-import component-from-global-scope="ChromeWindow" from="./browser-window.jsx" width="{{ 1100 }}" height="{{ 680 }}" url="spinq.live/booth" hint-size="1100px,680px">
+  <div style="display:flex;flex-direction:column;height:100%;background:#0a0a0c;color:#f2f2ef;font-family:'Space Grotesk',system-ui,sans-serif">
+    <div style="display:flex;align-items:center;gap:18px;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,.08)">
+      <div style="font-size:17px;font-weight:700;letter-spacing:.04em">SPINQ <span style="color:rgba(255,255,255,.4);font-weight:400">Booth</span></div>
+      <div style="display:flex;align-items:center;background:#16161a;border-radius:11px;padding:3px">
+        <div style="display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:9px;background:#c8f542;color:#0a0a0c;font-size:13px;font-weight:700"><div style="width:7px;height:7px;border-radius:50%;background:#0a0a0c"></div>Live</div>
+        <div style="padding:8px 16px;font-size:13px;color:rgba(255,255,255,.5)">Offline</div>
+      </div>
+      <div style="font-size:12.5px;color:rgba(255,255,255,.45)">Guests can send requests</div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:20px;font-size:13px;color:rgba(255,255,255,.6)">
+        <div>Requests <span style="color:#f2f2ef;font-weight:600">27</span></div>
+        <div style="display:flex;align-items:center;gap:6px;padding:6px 11px;background:#16161a;border-radius:9px">Tips <span style="color:#c8f542;font-weight:700">$164</span><span style="font-size:10.5px;color:rgba(255,255,255,.35)">only you see this</span></div>
+      </div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:0">
+      <div style="display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,.08);min-height:0">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:16px 24px 10px">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.4)">INCOMING</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4)">newest first</div>
+        </div>
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:0 24px 16px">
+          <sc-for list="{{ incoming }}" as="r" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:14px 16px;background:#16161a;border-radius:14px;border:1px solid {{ r.border }}">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+                  <div style="font-size:15px;font-weight:600">{{ r.title }} <span style="color:rgba(255,255,255,.5);font-weight:400">· {{ r.artist }}</span></div>
+                  <div style="font-size:12px;color:rgba(255,255,255,.5)">{{ r.meta }}</div>
+                </div>
+                <sc-if value="{{ r.tip }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:12px;font-weight:700;padding:4px 9px;border-radius:7px;background:rgba(200,245,66,.15);color:#c8f542">{{ r.tip }}</div>
+                </sc-if>
+              </div>
+              <sc-if value="{{ r.note }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:12.5px;color:rgba(255,255,255,.65);padding:8px 10px;background:#0a0a0c;border-radius:8px">“{{ r.note }}”</div>
+              </sc-if>
+              <div style="display:flex;gap:8px">
+                <div style="flex:1;text-align:center;padding:8px 0;border-radius:9px;background:#c8f542;color:#0a0a0c;font-size:13px;font-weight:700">Accept</div>
+                <div style="flex:1;text-align:center;padding:8px 0;border-radius:9px;border:1px solid rgba(255,255,255,.15);font-size:13px;color:rgba(255,255,255,.6)">Decline</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;min-height:0">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:16px 24px 10px">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.4)">QUEUE</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4)">drag to reorder</div>
+        </div>
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;padding:0 24px">
+          <sc-for list="{{ djQueue }}" as="s" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+              <div style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.3);width:18px">{{ s.n }}</div>
+              <div style="color:rgba(255,255,255,.25);font-size:13px;letter-spacing:2px">⋮⋮</div>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+                <div style="font-size:14px;font-weight:500">{{ s.title }}</div>
+                <div style="font-size:12px;color:rgba(255,255,255,.5)">{{ s.artist }} · ▲ {{ s.votes }}</div>
+              </div>
+              <div style="font-size:12px;color:rgba(255,255,255,.55);padding:6px 11px;border:1px solid rgba(255,255,255,.15);border-radius:8px">Played ✓</div>
+            </div>
+          </sc-for>
+          <div style="margin-top:auto;padding:14px 0 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.4);margin-right:4px">BLOCKED</div>
+            <div style="font-size:12px;padding:5px 10px;border-radius:999px;background:#16161a;color:rgba(255,255,255,.6)">Country ✕</div>
+            <div style="font-size:12px;padding:5px 10px;border-radius:999px;background:#16161a;color:rgba(255,255,255,.6)">Baby Shark ✕</div>
+            <div style="font-size:12px;padding:5px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.2);color:rgba(255,255,255,.4)">+ block</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-import>
+</div>
+</div>
+
+<!-- 2c Big screen, live, no tips -->
+<div class="dv-opt" id="2c">
+<div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>Venue · big screen, live — no tip info shown</div>
+<div class="dv-card" style="width:960px">
+  <div style="width:960px;height:540px;background:#0a0a0c;color:#f2f2ef;display:flex;flex-direction:column;font-family:'Space Grotesk',system-ui,sans-serif;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:28px 40px 0">
+      <div style="font-size:18px;font-weight:700;letter-spacing:.06em">SPINQ</div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:14px;color:rgba(255,255,255,.5)"><div style="width:8px;height:8px;border-radius:50%;background:#c8f542"></div>Requests are open</div>
+    </div>
+    <div style="flex:1;display:flex;align-items:center;padding:0 40px;gap:48px">
+      <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+        <div style="font-size:14px;font-weight:600;letter-spacing:.18em;color:#c8f542">NOW PLAYING</div>
+        <div style="font-size:56px;font-weight:700;line-height:1.05;letter-spacing:-.01em">Midnight City</div>
+        <div style="font-size:22px;color:rgba(255,255,255,.55)">M83 — requested by Ana</div>
+        <div style="display:flex;align-items:center;gap:14px;margin-top:10px;font-size:15px;color:rgba(255,255,255,.5)">
+          <span style="color:rgba(255,255,255,.35);font-size:12px;letter-spacing:.14em;font-weight:600">UP NEXT</span>
+          One More Time · Daft Punk <span style="color:#c8f542">▲ 31</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:26px;background:#16161a;border-radius:20px">
+        <div style="width:150px;height:150px;border-radius:12px;background:repeating-linear-gradient(45deg,#1c1c22 0 8px,#22222a 8px 16px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:11px;color:rgba(255,255,255,.45);text-align:center">QR code</div>
+        <div style="font-size:15px;font-weight:600">Scan to request a song</div>
+        <div style="font-size:12.5px;color:rgba(255,255,255,.45)">spinq.live/velour</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:0 40px 26px;font-size:13px;color:rgba(255,255,255,.4)">
+      <div style="width:6px;height:6px;border-radius:50%;background:#c8f542"></div>
+      Tonight: 27 requests · 142 people voting
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- 2d Big screen, offline -->
+<div class="dv-opt" id="2d">
+<div class="dv-olabel"><a class="dv-oid" href="#2d">2d</a>Venue · big screen when the DJ is offline</div>
+<div class="dv-card" style="width:960px">
+  <div style="width:960px;height:540px;background:#0a0a0c;color:#f2f2ef;display:flex;flex-direction:column;font-family:'Space Grotesk',system-ui,sans-serif;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:28px 40px 0">
+      <div style="font-size:18px;font-weight:700;letter-spacing:.06em">SPINQ</div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:14px;color:rgba(255,255,255,.5)"><div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3)"></div>Requests are closed</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:0 80px">
+      <div style="font-size:44px;font-weight:700;line-height:1.1">Requests open when the DJ goes live</div>
+      <div style="font-size:18px;color:rgba(255,255,255,.5)">Keep this page — the request line opens right here.</div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;padding:0 40px 30px;font-size:13px;color:rgba(255,255,255,.4)">Club Velour · DJ Nova starts at 10 PM</div>
+  </div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: "make <a class="dv-oid" href="#2b">2b</a> interactive so the toggle flips <a class="dv-oid" href="#2c">2c</a>/<a class="dv-oid" href="#2d">2d</a>" · "guest view when requests are offline" · "hide requester names from the big screen too"</p>
+</section>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">DJ request platform — first explorations</span></div>
+<p class="dv-notes"><strong>Assumptions:</strong> guests join by scanning a QR at the venue (no account), so the guest side is phone-first; the DJ works a laptop/tablet at the booth. Working name <strong>SPINQ</strong> (placeholder). System: near-black <strong>#0a0a0c</strong>, one neon accent <strong>#c8f542</strong>, Space Grotesk, clean minimal copy. Four surfaces below — guest request flow (<a class="dv-oid" href="#1a">1a</a>), guest live queue with upvote/boost (<a class="dv-oid" href="#1b">1b</a>), DJ booth dashboard (<a class="dv-oid" href="#1c">1c</a>), and a big-screen display (<a class="dv-oid" href="#1d">1d</a>).</p>
+<div class="dv-opts">
+
+<!-- 1a Guest: search & request -->
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Guest · search &amp; request (mobile)</div>
+<div class="dv-card">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" title="" hint-size="390px,844px">
+  <div style="display:flex;flex-direction:column;height:100%;background:#0a0a0c;color:#f2f2ef">
+    <div style="display:flex;flex-direction:column;gap:4px;padding:10px 20px 14px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between">
+        <div style="font-size:20px;font-weight:700;letter-spacing:.04em">SPINQ</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.5)">Club Velour · Fri</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:10px 12px;background:#16161a;border-radius:12px">
+        <div style="width:8px;height:8px;border-radius:50%;background:#c8f542"></div>
+        <div style="flex:1;font-size:13px;color:rgba(255,255,255,.75)">Now playing — Midnight City · M83</div>
+      </div>
+    </div>
+    <div style="padding:0 20px 12px">
+      <div style="display:flex;align-items:center;gap:10px;padding:13px 14px;background:#1c1c22;border:1px solid rgba(200,245,66,.35);border-radius:14px">
+        <span style="font-size:14px;color:rgba(255,255,255,.4)">⌕</span>
+        <span style="font-size:15px">gla<span style="display:inline-block;width:2px;height:18px;background:#c8f542;vertical-align:middle;margin-left:1px"></span></span>
+      </div>
+    </div>
+    <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;padding:0 20px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.4);padding:8px 0 10px">RESULTS</div>
+      <sc-for list="{{ searchResults }}" as="song" hint-placeholder-count="4">
+        <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+          <div style="width:44px;height:44px;border-radius:8px;background:#1c1c22;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:11px;color:rgba(255,255,255,.35)">{{ song.init }}</div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+            <div style="font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ song.title }}</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.5)">{{ song.artist }}</div>
+          </div>
+          <div style="padding:8px 14px;border-radius:999px;background:{{ song.btnBg }};color:{{ song.btnFg }};font-size:12.5px;font-weight:600">{{ song.btnLabel }}</div>
+        </div>
+      </sc-for>
+      <div style="margin-top:auto;padding:14px 0 18px">
+        <div style="display:flex;flex-direction:column;gap:10px;padding:16px;background:#16161a;border-radius:16px">
+          <div style="font-size:13px;font-weight:600">Glass · Animal Collective</div>
+          <div style="padding:11px 12px;background:#0a0a0c;border-radius:10px;font-size:13px;color:rgba(255,255,255,.35)">Add a dedication (optional)</div>
+          <div style="display:flex;gap:8px">
+            <div style="flex:1;text-align:center;padding:10px 0;border-radius:10px;border:1px solid rgba(255,255,255,.15);font-size:13px;color:rgba(255,255,255,.7)">No tip</div>
+            <div style="flex:1;text-align:center;padding:10px 0;border-radius:10px;border:1px solid #c8f542;background:rgba(200,245,66,.12);font-size:13px;color:#c8f542;font-weight:600">$2</div>
+            <div style="flex:1;text-align:center;padding:10px 0;border-radius:10px;border:1px solid rgba(255,255,255,.15);font-size:13px;color:rgba(255,255,255,.7)">$5</div>
+          </div>
+          <div style="text-align:center;padding:14px 0;border-radius:12px;background:#c8f542;color:#0a0a0c;font-size:15px;font-weight:700">Send request · $2</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-import>
+</div>
+</div>
+
+<!-- 1b Guest: live queue -->
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Guest · live queue, upvote &amp; boost (mobile)</div>
+<div class="dv-card">
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" title="" hint-size="390px,844px">
+  <div style="display:flex;flex-direction:column;height:100%;background:#0a0a0c;color:#f2f2ef">
+    <div style="padding:10px 20px 0;display:flex;align-items:baseline;justify-content:space-between">
+      <div style="font-size:20px;font-weight:700;letter-spacing:.04em">SPINQ</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.5)">142 in the room</div>
+    </div>
+    <div style="margin:14px 20px 0;padding:18px;background:#16161a;border-radius:18px;display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:8px;height:8px;border-radius:50%;background:#c8f542"></div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:#c8f542">NOW PLAYING</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:64px;height:64px;border-radius:12px;background:#1c1c22;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:13px;color:rgba(255,255,255,.35)">MC</div>
+        <div style="display:flex;flex-direction:column;gap:3px">
+          <div style="font-size:18px;font-weight:600">Midnight City</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.5)">M83 · requested by Ana</div>
+        </div>
+      </div>
+      <div style="height:3px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden"><div style="width:62%;height:100%;background:#c8f542"></div></div>
+    </div>
+    <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;padding:16px 20px 0">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:10px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.4)">UP NEXT</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.35)">tap ▲ to vote</div>
+      </div>
+      <sc-for list="{{ queue }}" as="q" hint-placeholder-count="4">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:2px;width:34px;padding:7px 0;border-radius:10px;background:{{ q.voteBg }};border:1px solid {{ q.voteBorder }}">
+            <div style="font-size:11px;color:{{ q.voteFg }}">▲</div>
+            <div style="font-size:12px;font-weight:700;color:{{ q.voteFg }}">{{ q.votes }}</div>
+          </div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+            <div style="font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.title }}</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.5)">{{ q.artist }}</div>
+          </div>
+          <sc-if value="{{ q.boosted }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:4px 8px;border-radius:6px;background:rgba(200,245,66,.15);color:#c8f542">BOOSTED</div>
+          </sc-if>
+        </div>
+      </sc-for>
+      <div style="margin-top:auto;padding:14px 0 18px">
+        <div style="text-align:center;padding:15px 0;border-radius:14px;background:#c8f542;color:#0a0a0c;font-size:15px;font-weight:700">+ Request a song</div>
+      </div>
+    </div>
+  </div>
+</x-import>
+</div>
+</div>
+
+<!-- 1c DJ dashboard -->
+<div class="dv-opt" id="1c">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>DJ · booth dashboard (desktop)</div>
+<div class="dv-card">
+<x-import component-from-global-scope="ChromeWindow" from="./browser-window.jsx" width="{{ 1100 }}" height="{{ 680 }}" url="spinq.live/booth" hint-size="1100px,680px">
+  <div style="display:flex;flex-direction:column;height:100%;background:#0a0a0c;color:#f2f2ef;font-family:'Space Grotesk',system-ui,sans-serif">
+    <div style="display:flex;align-items:center;gap:20px;padding:16px 24px;border-bottom:1px solid rgba(255,255,255,.08)">
+      <div style="font-size:17px;font-weight:700;letter-spacing:.04em">SPINQ <span style="color:rgba(255,255,255,.4);font-weight:400">Booth</span></div>
+      <div style="display:flex;align-items:center;gap:8px;padding:7px 12px;background:#16161a;border-radius:10px;font-size:13px">
+        <div style="width:7px;height:7px;border-radius:50%;background:#c8f542"></div>Club Velour — live
+      </div>
+      <div style="margin-left:auto;display:flex;gap:24px;font-size:13px;color:rgba(255,255,255,.6)">
+        <div>Requests <span style="color:#f2f2ef;font-weight:600">27</span></div>
+        <div>Tips tonight <span style="color:#c8f542;font-weight:700">$164</span></div>
+        <div>In room <span style="color:#f2f2ef;font-weight:600">142</span></div>
+      </div>
+    </div>
+    <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:0">
+      <div style="display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,.08);min-height:0">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:16px 24px 10px">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.4)">INCOMING</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4)">newest first</div>
+        </div>
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:0 24px 16px">
+          <sc-for list="{{ incoming }}" as="r" hint-placeholder-count="3">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:14px 16px;background:#16161a;border-radius:14px;border:1px solid {{ r.border }}">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+                  <div style="font-size:15px;font-weight:600">{{ r.title }} <span style="color:rgba(255,255,255,.5);font-weight:400">· {{ r.artist }}</span></div>
+                  <div style="font-size:12px;color:rgba(255,255,255,.5)">{{ r.meta }}</div>
+                </div>
+                <sc-if value="{{ r.tip }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size:12px;font-weight:700;padding:4px 9px;border-radius:7px;background:rgba(200,245,66,.15);color:#c8f542">{{ r.tip }}</div>
+                </sc-if>
+              </div>
+              <sc-if value="{{ r.note }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:12.5px;color:rgba(255,255,255,.65);padding:8px 10px;background:#0a0a0c;border-radius:8px">“{{ r.note }}”</div>
+              </sc-if>
+              <div style="display:flex;gap:8px">
+                <div style="flex:1;text-align:center;padding:8px 0;border-radius:9px;background:#c8f542;color:#0a0a0c;font-size:13px;font-weight:700">Accept</div>
+                <div style="flex:1;text-align:center;padding:8px 0;border-radius:9px;border:1px solid rgba(255,255,255,.15);font-size:13px;color:rgba(255,255,255,.6)">Decline</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;min-height:0">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:16px 24px 10px">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.4)">QUEUE</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.4)">drag to reorder</div>
+        </div>
+        <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;padding:0 24px">
+          <sc-for list="{{ djQueue }}" as="s" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+              <div style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.3);width:18px">{{ s.n }}</div>
+              <div style="color:rgba(255,255,255,.25);font-size:13px;letter-spacing:2px">⋮⋮</div>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+                <div style="font-size:14px;font-weight:500">{{ s.title }}</div>
+                <div style="font-size:12px;color:rgba(255,255,255,.5)">{{ s.artist }} · ▲ {{ s.votes }}</div>
+              </div>
+              <div style="font-size:12px;color:rgba(255,255,255,.55);padding:6px 11px;border:1px solid rgba(255,255,255,.15);border-radius:8px">Played ✓</div>
+            </div>
+          </sc-for>
+          <div style="margin-top:auto;padding:14px 0 16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.4);margin-right:4px">BLOCKED</div>
+            <div style="font-size:12px;padding:5px 10px;border-radius:999px;background:#16161a;color:rgba(255,255,255,.6)">Country ✕</div>
+            <div style="font-size:12px;padding:5px 10px;border-radius:999px;background:#16161a;color:rgba(255,255,255,.6)">Baby Shark ✕</div>
+            <div style="font-size:12px;padding:5px 10px;border-radius:999px;border:1px dashed rgba(255,255,255,.2);color:rgba(255,255,255,.4)">+ block</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</x-import>
+</div>
+</div>
+
+<!-- 1d Big screen -->
+<div class="dv-opt" id="1d">
+<div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>Venue · big-screen display (16:9)</div>
+<div class="dv-card" style="width:960px">
+  <div style="width:960px;height:540px;background:#0a0a0c;color:#f2f2ef;display:flex;flex-direction:column;font-family:'Space Grotesk',system-ui,sans-serif;position:relative;overflow:hidden">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:28px 40px 0">
+      <div style="font-size:18px;font-weight:700;letter-spacing:.06em">SPINQ</div>
+      <div style="font-size:14px;color:rgba(255,255,255,.5)">Club Velour · DJ Nova</div>
+    </div>
+    <div style="flex:1;display:flex;align-items:center;padding:0 40px;gap:48px">
+      <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:10px;height:10px;border-radius:50%;background:#c8f542"></div>
+          <div style="font-size:14px;font-weight:600;letter-spacing:.18em;color:#c8f542">NOW PLAYING</div>
+        </div>
+        <div style="font-size:56px;font-weight:700;line-height:1.05;letter-spacing:-.01em">Midnight City</div>
+        <div style="font-size:22px;color:rgba(255,255,255,.55)">M83 — requested by Ana</div>
+        <div style="display:flex;align-items:center;gap:14px;margin-top:10px;font-size:15px;color:rgba(255,255,255,.5)">
+          <span style="color:rgba(255,255,255,.35);font-size:12px;letter-spacing:.14em;font-weight:600">UP NEXT</span>
+          One More Time · Daft Punk <span style="color:#c8f542">▲ 31</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:26px;background:#16161a;border-radius:20px">
+        <div style="width:150px;height:150px;border-radius:12px;background:repeating-linear-gradient(45deg,#1c1c22 0 8px,#22222a 8px 16px);display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:11px;color:rgba(255,255,255,.45);text-align:center">QR code</div>
+        <div style="font-size:15px;font-weight:600">Scan to request a song</div>
+        <div style="font-size:12.5px;color:rgba(255,255,255,.45)">spinq.live/velour</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;padding:0 40px 26px;font-size:13px;color:rgba(255,255,255,.4)">
+      <div style="width:6px;height:6px;border-radius:50%;background:#c8f542"></div>
+      Tonight: 27 requests · $164 in tips · 142 people voting
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: "make <a class="dv-oid" href="#1a">1a</a> a working interactive prototype" · "riff on the queue in <a class="dv-oid" href="#1b">1b</a> — try 2 other layouts" · "different accent colors"</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const on = 'rgba(200,245,66,.12)', ob = 'rgba(200,245,66,.5)';
+    return {
+      searchResults: [
+        { init: 'GL', title: 'Glass', artist: 'Animal Collective', btnLabel: 'Selected', btnBg: '#c8f542', btnFg: '#0a0a0c' },
+        { init: 'GA', title: 'Glass Animals — Heat Waves', artist: 'Glass Animals', btnLabel: 'Request', btnBg: 'rgba(255,255,255,.1)', btnFg: '#f2f2ef' },
+        { init: 'GO', title: 'Glass Onion', artist: 'The Beatles', btnLabel: 'Request', btnBg: 'rgba(255,255,255,.1)', btnFg: '#f2f2ef' },
+      ],
+      queue: [
+        { title: 'One More Time', artist: 'Daft Punk', votes: 31, boosted: true, voteBg: on, voteBorder: ob, voteFg: '#c8f542' },
+        { title: 'Dance Yrself Clean', artist: 'LCD Soundsystem', votes: 24, boosted: false, voteBg: on, voteBorder: ob, voteFg: '#c8f542' },
+        { title: 'Heat Waves', artist: 'Glass Animals', votes: 18, boosted: false, voteBg: 'transparent', voteBorder: 'rgba(255,255,255,.15)', voteFg: 'rgba(255,255,255,.7)' },
+        { title: 'Levitating', artist: 'Dua Lipa', votes: 12, boosted: false, voteBg: 'transparent', voteBorder: 'rgba(255,255,255,.15)', voteFg: 'rgba(255,255,255,.7)' },
+        { title: 'Around the World', artist: 'Daft Punk', votes: 9, boosted: false, voteBg: 'transparent', voteBorder: 'rgba(255,255,255,.15)', voteFg: 'rgba(255,255,255,.7)' },
+      ],
+      incoming: [
+        { title: 'Pump Up the Jam', artist: 'Technotronic', meta: 'Marco · just now', tip: '$5 tip', note: 'For Jess — it’s her birthday!!', border: 'rgba(200,245,66,.4)' },
+        { title: 'Blinding Lights', artist: 'The Weeknd', meta: 'Sam · 1 min ago', tip: false, note: false, border: 'rgba(255,255,255,.08)' },
+        { title: 'Da Funk', artist: 'Daft Punk', meta: 'Priya · 3 min ago', tip: '$2 tip', note: false, border: 'rgba(255,255,255,.08)' },
+      ],
+      djQueue: [
+        { n: '01', title: 'One More Time', artist: 'Daft Punk', votes: 31 },
+        { n: '02', title: 'Dance Yrself Clean', artist: 'LCD Soundsystem', votes: 24 },
+        { n: '03', title: 'Heat Waves', artist: 'Glass Animals', votes: 18 },
+        { n: '04', title: 'Levitating', artist: 'Dua Lipa', votes: 12 },
+        { n: '05', title: 'Around the World', artist: 'Daft Punk', votes: 9 },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

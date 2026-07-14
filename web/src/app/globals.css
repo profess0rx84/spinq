@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0a0a0c;
+  --surface: #16161a;
+  --surface-2: #1c1c22;
+  --canvas: #111114;
+  --text: #f2f2ef;
+  --text-2: rgba(255, 255, 255, 0.5);
+  --text-3: rgba(255, 255, 255, 0.4);
+  --text-4: rgba(255, 255, 255, 0.35);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-2: rgba(255, 255, 255, 0.15);
+  --border-3: rgba(255, 255, 255, 0.18);
+  --accent: #c8f542;
+  --accent-10: rgba(200, 245, 66, 0.1);
+  --accent-12: rgba(200, 245, 66, 0.12);
+  --accent-15: rgba(200, 245, 66, 0.15);
+  --accent-35: rgba(200, 245, 66, 0.35);
+  --accent-40: rgba(200, 245, 66, 0.4);
+  --accent-50: rgba(200, 245, 66, 0.5);
+  --on-accent: #0a0a0c;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-canvas: var(--canvas);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+  --color-text-4: var(--text-4);
+  --color-border: var(--border);
+  --color-border-2: var(--border-2);
+  --color-border-3: var(--border-3);
+  --color-accent: var(--accent);
+  --color-accent-10: var(--accent-10);
+  --color-accent-12: var(--accent-12);
+  --color-accent-15: var(--accent-15);
+  --color-accent-35: var(--accent-35);
+  --color-accent-40: var(--accent-40);
+  --color-accent-50: var(--accent-50);
+  --color-on-accent: var(--on-accent);
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: ui-monospace, Menlo, monospace;
+}
+
+@keyframes eqbar {
+  from {
+    transform: scaleY(0.3);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-eqbar {
+  animation: eqbar 0.7s ease-in-out infinite alternate;
+}
+
+.animate-toast-in {
+  animation: toast-in 0.25s ease;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+input {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  outline: none;
+}
+
+a {
+  color: var(--accent);
+}

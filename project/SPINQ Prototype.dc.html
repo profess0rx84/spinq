@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#111114;font-family:'Space Grotesk',system-ui,sans-serif}
+a{color:#c8f542}a:hover{color:#e2ff7a}
+input{font-family:'Space Grotesk',system-ui,sans-serif;outline:none}
+@keyframes eqbar{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</helmet>
+<div style="display:flex;flex-direction:column;gap:20px;padding:32px 40px 48px;align-items:flex-start">
+<div style="display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.55);font-size:13px">
+  <span style="font-weight:700;color:#f2f2ef;letter-spacing:.04em">SPINQ · interactive demo</span>
+  Phone = guest · Window = DJ booth. Send a request on the phone and accept it in the booth — everything is live.
+</div>
+<div style="display:flex;gap:44px;align-items:flex-start;flex-wrap:wrap">
+
+<!-- ===== GUEST PHONE ===== -->
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" title="" hint-size="390px,844px">
+  <div style="position:relative;display:flex;flex-direction:column;height:100%;background:#0a0a0c;color:#f2f2ef;overflow:hidden">
+    <div style="padding:10px 20px 0;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:20px;font-weight:700;letter-spacing:.04em">SPINQ</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:12px;color:rgba(255,255,255,.5)">{{ venueName }}</div>
+        <div onClick="{{ toggleNotifs }}" style="cursor:pointer;position:relative;width:34px;height:34px;border-radius:50%;background:#16161a;display:flex;align-items:center;justify-content:center;font-size:15px">🔔
+          <sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;top:-3px;right:-3px;min-width:16px;height:16px;border-radius:8px;background:{{ accent }};color:#0a0a0c;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px">{{ unread }}</div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+    <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;top:56px;left:20px;right:20px;z-index:10;background:#1c1c22;border:1px solid rgba(255,255,255,.12);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.6);display:flex;flex-direction:column;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.08)">
+          <div style="font-size:12px;font-weight:600;letter-spacing:.1em;color:rgba(255,255,255,.5)">NOTIFICATIONS</div>
+          <div onClick="{{ toggleNotifs }}" style="cursor:pointer;font-size:12px;color:rgba(255,255,255,.45)">close</div>
+        </div>
+        <sc-if value="{{ noNotifs }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:22px;text-align:center;font-size:12.5px;color:rgba(255,255,255,.4)">Nothing yet — request a song!</div>
+        </sc-if>
+        <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="2">
+          <div style="display:flex;align-items:baseline;gap:10px;padding:11px 14px;border-bottom:1px solid rgba(255,255,255,.05)">
+            <div style="flex:1;font-size:13px;line-height:1.4">{{ n.msg }}</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.35);flex:none">{{ n.at }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <div style="margin:14px 20px 0;padding:16px;background:#16161a;border-radius:16px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="display:flex;align-items:flex-end;gap:2px;height:14px;width:20px"><div style="flex:1;height:100%;background:{{ accent }};border-radius:1px;transform-origin:bottom;animation:eqbar 0.7s ease-in-out -0.2s infinite alternate"></div><div style="flex:1;height:100%;background:{{ accent }};border-radius:1px;transform-origin:bottom;animation:eqbar 0.6s ease-in-out -0.5s infinite alternate"></div><div style="flex:1;height:100%;background:{{ accent }};border-radius:1px;transform-origin:bottom;animation:eqbar 0.8s ease-in-out -0.1s infinite alternate"></div></div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:{{ accent }}">NOW PLAYING</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="font-size:17px;font-weight:600">{{ nowTitle }}</div>
+        <div style="font-size:12.5px;color:rgba(255,255,255,.5)">{{ nowSub }}</div>
+      </div>
+    </div>
+    <div style="flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;padding:14px 20px 0">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;padding-bottom:8px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.4)">UP NEXT</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.35)">tap ▲ to vote</div>
+      </div>
+      <sc-if value="{{ queueEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="padding:26px 0;text-align:center;font-size:13px;color:rgba(255,255,255,.4)">Queue is empty — request something!</div>
+      </sc-if>
+      <sc-for list="{{ guestQueue }}" as="q" hint-placeholder-count="4">
+        <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+          <div onClick="{{ q.onVote }}" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;width:34px;padding:7px 0;border-radius:10px;background:{{ q.voteBg }};border:1px solid {{ q.voteBorder }}">
+            <div style="font-size:11px;color:{{ q.voteFg }}">▲</div>
+            <div style="font-size:12px;font-weight:700;color:{{ q.voteFg }}">{{ q.votes }}</div>
+          </div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+            <div style="font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ q.title }}</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.5)">{{ q.artist }}</div>
+          </div>
+          <sc-if value="{{ q.boosted }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:10.5px;font-weight:700;letter-spacing:.06em;padding:4px 8px;border-radius:6px;background:{{ accent15 }};color:{{ accent }}">BOOSTED</div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+    <div style="padding:12px 20px 18px">
+      <sc-if value="{{ live }}" hint-placeholder-val="{{ true }}">
+        <div onClick="{{ openSheet }}" style="cursor:pointer;text-align:center;padding:15px 0;border-radius:14px;background:{{ accent }};color:#0a0a0c;font-size:15px;font-weight:700" style-hover="filter:brightness(1.08)">+ Request a song</div>
+      </sc-if>
+      <sc-if value="{{ offline }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:5px;padding:14px 16px;border-radius:14px;background:#16161a;text-align:center">
+          <div style="font-size:14px;font-weight:600;color:rgba(255,255,255,.75)">Requests are closed</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.45);line-height:1.5">They'll open right here when the DJ goes live — keep browsing the queue and voting.</div>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- Request sheet -->
+    <sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;background:#0a0a0c;display:flex;flex-direction:column;paddingTop:54px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 20px 12px">
+          <div style="font-size:17px;font-weight:700">Request a song</div>
+          <div onClick="{{ closeSheet }}" style="cursor:pointer;width:32px;height:32px;border-radius:50%;background:#16161a;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);font-size:14px">✕</div>
+        </div>
+        <div style="padding:0 20px 12px">
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:#1c1c22;border:1px solid {{ accent35 }};border-radius:14px">
+            <span style="font-size:14px;color:rgba(255,255,255,.4)">⌕</span>
+            <input value="{{ search }}" onChange="{{ onSearch }}" placeholder="Song or artist" style="flex:1;background:transparent;border:none;color:#f2f2ef;font-size:15px">
+          </div>
+        </div>
+        <sc-if value="{{ noSel }}" hint-placeholder-val="{{ true }}">
+          <div style="flex:1;min-height:0;overflow:auto;padding:0 20px">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:2px 0 6px">
+              <div style="font-size:10.5px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.35);text-transform:uppercase">{{ searchHint }}</div>
+              <sc-if value="{{ searching }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:11px;color:{{ accent }}">searching…</div>
+              </sc-if>
+            </div>
+            <sc-for list="{{ results }}" as="song" hint-placeholder-count="4">
+              <div onClick="{{ song.onPick }}" style="cursor:pointer;display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06)" style-hover="background:rgba(255,255,255,.03)">
+                <sc-if value="{{ song.art }}" hint-placeholder-val="{{ false }}">
+                  <div style="{{ song.artStyle }}"></div>
+                </sc-if>
+                <sc-if value="{{ song.noArt }}" hint-placeholder-val="{{ true }}">
+                  <div style="width:44px;height:44px;border-radius:8px;background:#1c1c22;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,monospace;font-size:11px;color:rgba(255,255,255,.35)">{{ song.init }}</div>
+                </sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+                  <div style="font-size:15px;font-weight:500">{{ song.title }}</div>
+                  <div style="font-size:12px;color:rgba(255,255,255,.5)">{{ song.artist }}</div>
+                </div>
+                <div style="padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.1);font-size:12.5px;font-weight:600">Pick</div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:26px 0;text-align:center;font-size:13px;color:rgba(255,255,255,.4)">No matches — try another search</div>
+            </sc-if>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:0 20px 18px">
+            <div style="display:flex;flex-direction:column;gap:12px;padding:18px;background:#16161a;border-radius:18px">
+              <div style="display:flex;align-items:center;gap:14px">
+                <sc-if value="{{ selArt }}" hint-placeholder-val="{{ false }}">
+                  <div style="{{ selArtStyle }}"></div>
+                </sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+                  <div style="font-size:16px;font-weight:600;line-height:1.25">{{ selTitle }}</div>
+                  <div style="font-size:13px;color:rgba(255,255,255,.5)">{{ selArtist }}</div>
+                </div>
+                <div onClick="{{ clearSel }}" style="cursor:pointer;align-self:flex-start;font-size:12px;color:rgba(255,255,255,.45)">change</div>
+              </div>
+              <input value="{{ ded }}" onChange="{{ onDed }}" placeholder="Add a dedication (optional)" style="padding:12px;background:#0a0a0c;border:none;border-radius:10px;color:#f2f2ef;font-size:13.5px">
+              <div style="display:flex;gap:8px">
+                <sc-for list="{{ tipChips }}" as="t" hint-placeholder-count="3">
+                  <div onClick="{{ t.onPick }}" style="cursor:pointer;flex:1;text-align:center;padding:10px 0;border-radius:10px;border:1px solid {{ t.border }};background:{{ t.bg }};font-size:13px;color:{{ t.fg }};font-weight:{{ t.weight }}">{{ t.label }}</div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ hasTip }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="font-size:12px;color:rgba(255,255,255,.5)">Pay with</div>
+                  <sc-for list="{{ payChips }}" as="p" hint-placeholder-count="2">
+                    <div onClick="{{ p.onPick }}" style="cursor:pointer;flex:1;text-align:center;padding:9px 0;border-radius:10px;border:1px solid {{ p.border }};background:{{ p.bg }};font-size:12.5px;color:{{ p.fg }};font-weight:{{ p.weight }}">{{ p.label }}</div>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);text-align:center">$5 boosts your song toward the top · tips go straight to the DJ</div>
+              <div onClick="{{ sendRequest }}" style="cursor:pointer;text-align:center;padding:14px 0;border-radius:12px;background:{{ accent }};color:#0a0a0c;font-size:15px;font-weight:700" style-hover="filter:brightness(1.08)">{{ sendLabel }}</div>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+    <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;left:20px;right:20px;bottom:96px;padding:13px 16px;background:#1c1c22;border:1px solid {{ accent40 }};border-radius:12px;font-size:13px;color:#f2f2ef;text-align:center;animation:toastIn .25s ease;box-shadow:0 8px 30px rgba(0,0,0,.5)">{{ toast }}</div>
+    </sc-if>
+  </div>
+</x-import>
+
+<!-- ===== DJ BOOTH ===== -->
+<x-import component-from-global-scope="ChromeWindow" from="./browser-window.jsx" width="{{ 1100 }}" height="{{ 680 }}" url="spinq.live/booth" hint-size="1100px,680px">
+  <sc-if value="{{ loggedOut }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;align-items:center;justify-content:center;height:100%;background:#0a0a0c;color:#f2f2ef;font-family:'Space Grotesk',system-ui,sans-serif">
+      <div style="width:340px;display:flex;flex-direction:column;gap:22px">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:24px;font-weight:700;letter-spacing:.04em">SPINQ <span style="color:rgba(255,255,255,.4);font-weight:400">Booth</span></div>
+          <div style="font-size:13.5px;color:rgba(255,255,255,.55)">Sign in to run requests for your night.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="padding:13px 14px;background:#16161a;border-radius:12px;font-size:14px;color:rgba(255,255,255,.85)">nova@spinq.live</div>
+          <div style="padding:13px 14px;background:#16161a;border-radius:12px;font-size:14px;color:rgba(255,255,255,.4);letter-spacing:3px">••••••••••</div>
+        </div>
+        <div onClick="{{ signIn }}" style="cursor:pointer;text-align:center;padding:14px 0;border-radius:12px;background:{{ accent }};color:#0a0a0c;font-size:15px;font-weight:700" style-hover="filter:brightness(1.08)">Sign in</div>
+        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:#16161a;border-radius:12px;font-size:12.5px;color:rgba(255,255,255,.55)">
+          <div style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3)"></div>
+          Requests stay offline until you go live.
+        </div>
+      </div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ loggedIn }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;height:100%;background:#0a0a0c;color:#f2f2ef;font-family:'Space Grotesk',system-ui,sans-serif">
+      <div style="display:flex;align-items:center;gap:18px;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,.08)">
+        <div style="font-size:17px;font-weight:700;letter-spacing:.04em">SPINQ <span style="color:rgba(255,255,255,.4);font-weight:400">Booth</span></div>
+        <div style="display:flex;align-items:center;background:#16161a;border-radius:11px;padding:3px">
+          <div onClick="{{ goLive }}" style="cursor:pointer;display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:9px;background:{{ liveBg }};color:{{ liveFg }};font-size:13px;font-weight:700"><div style="width:7px;height:7px;border-radius:50%;background:{{ liveDot }}"></div>Live</div>
+          <div onClick="{{ goOffline }}" style="cursor:pointer;padding:8px 16px;border-radius:9px;background:{{ offBg }};font-size:13px;color:{{ offFg }};font-weight:{{ offWeight }}">Offline</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 12px;background:#16161a;border-radius:9px">
+          <input value="{{ venue }}" onChange="{{ onVenue }}" placeholder="Venue name" style="background:transparent;border:none;color:#f2f2ef;font-size:13px;font-weight:600;width:130px">
+          <span style="font-size:12px;color:rgba(255,255,255,.4)">{{ todayLabel }}</span>
+        </div>
+        <div style="font-size:12.5px;color:rgba(255,255,255,.45)">{{ liveHint }}</div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:14px;font-size:13px;color:rgba(255,255,255,.6)">
+          <div>Requests <span style="color:#f2f2ef;font-weight:600">{{ reqCount }}</span></div>
+          <div style="display:flex;align-items:center;gap:10px;padding:6px 11px;background:#16161a;border-radius:9px">
+            <span>Venmo <span style="color:{{ accent }};font-weight:700">{{ tipsVenmo }}</span></span>
+            <span style="color:rgba(255,255,255,.2)">|</span>
+            <span>Cash App <span style="color:{{ accent }};font-weight:700">{{ tipsCash }}</span></span>
+            <span style="font-size:10.5px;color:rgba(255,255,255,.35)">only you see this</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;padding:10px 24px;border-bottom:1px solid rgba(255,255,255,.08)">
+        <div onClick="{{ showTonight }}" style="cursor:pointer;padding:7px 16px;border-radius:9px;background:{{ tabTonightBg }};color:{{ tabTonightFg }};font-size:13px;font-weight:600">Tonight</div>
+        <div onClick="{{ showHistory }}" style="cursor:pointer;padding:7px 16px;border-radius:9px;background:{{ tabHistoryBg }};color:{{ tabHistoryFg }};font-size:13px;font-weight:600">History</div>
+        <div onClick="{{ endSession }}" style="cursor:pointer;margin-left:auto;padding:7px 14px;border-radius:9px;border:1px solid rgba(255,255,255,.18);font-size:12.5px;color:rgba(255,255,255,.65)" style-hover="background:rgba(255,255,255,.06)">End session</div>
+      </div>
+      <sc-if value="{{ viewTonight }}" hint-placeholder-val="{{ true }}">
+      <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:0">
+        <div style="display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,.08);min-height:0">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;padding:16px 24px 10px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.4)">INCOMING</div>
+              <sc-if value="{{ hasIncoming }}" hint-placeholder-val="{{ false }}">
+                <div style="min-width:18px;height:18px;border-radius:9px;background:{{ accent }};color:#0a0a0c;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px">{{ reqCount }}</div>
+              </sc-if>
+            </div>
+            <div onClick="{{ toggleChime }}" style="cursor:pointer;font-size:12px;color:{{ chimeFg }}">{{ chimeLabel }}</div>
+          </div>
+          <div style="flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:0 24px 16px">
+            <sc-if value="{{ incomingEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:26px 0;text-align:center;font-size:13px;color:rgba(255,255,255,.4)">No pending requests — send one from the phone →</div>
+            </sc-if>
+            <sc-for list="{{ incoming }}" as="r" hint-placeholder-count="2">
+              <div style="display:flex;flex-direction:column;gap:8px;padding:14px 16px;background:#16161a;border-radius:14px;border:1px solid {{ r.border }}">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+                    <div style="font-size:15px;font-weight:600">{{ r.title }} <span style="color:rgba(255,255,255,.5);font-weight:400">· {{ r.artist }}</span></div>
+                    <div style="font-size:12px;color:rgba(255,255,255,.5)">{{ r.meta }}</div>
+                  </div>
+                  <sc-if value="{{ r.tipLabel }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-size:12px;font-weight:700;padding:4px 9px;border-radius:7px;background:{{ accent15 }};color:{{ accent }}">{{ r.tipLabel }}</div>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ r.note }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="flex:1;min-width:0;font-size:12.5px;color:rgba(255,255,255,.65);padding:8px 10px;background:#0a0a0c;border-radius:8px;opacity:{{ r.noteOpacity }}">“{{ r.note }}”</div>
+                    <div onClick="{{ r.onToggleNote }}" style="cursor:pointer;flex:none;font-size:11px;padding:6px 9px;border-radius:7px;border:1px solid {{ r.noteBorder }};color:{{ r.noteFg }}">{{ r.noteLabel }}</div>
+                  </div>
+                </sc-if>
+                <div style="display:flex;gap:8px">
+                  <div onClick="{{ r.onAccept }}" style="cursor:pointer;flex:1;text-align:center;padding:8px 0;border-radius:9px;background:{{ accent }};color:#0a0a0c;font-size:13px;font-weight:700" style-hover="filter:brightness(1.08)">Accept</div>
+                  <div onClick="{{ r.onDecline }}" style="cursor:pointer;flex:1;text-align:center;padding:8px 0;border-radius:9px;border:1px solid rgba(255,255,255,.15);font-size:13px;color:rgba(255,255,255,.6)" style-hover="background:rgba(255,255,255,.06)">Decline</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;min-height:0">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;padding:16px 24px 10px">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.4)">QUEUE</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="font-size:12px;color:rgba(255,255,255,.4)">{{ orderHint }}</div>
+              <sc-if value="{{ manual }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ autoSort }}" style="cursor:pointer;font-size:11.5px;padding:5px 10px;border-radius:7px;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.6)">Re-sort by votes</div>
+              </sc-if>
+            </div>
+          </div>
+          <div style="flex:1;overflow:auto;display:flex;flex-direction:column;padding:0 24px">
+            <sc-for list="{{ djQueue }}" as="s" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+                <div style="font-family:ui-monospace,monospace;font-size:12px;color:rgba(255,255,255,.3);width:18px">{{ s.n }}</div>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+                  <div style="font-size:14px;font-weight:500">{{ s.title }}</div>
+                  <div style="font-size:12px;color:rgba(255,255,255,.5)">{{ s.artist }} · ▲ {{ s.votes }}{{ s.boostTag }}</div>
+                </div>
+                <div style="display:flex;gap:4px">
+                  <div onClick="{{ s.onUp }}" style="cursor:pointer;width:26px;height:26px;border-radius:7px;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:12px;color:{{ s.upFg }}" style-hover="background:rgba(255,255,255,.08)">↑</div>
+                  <div onClick="{{ s.onDown }}" style="cursor:pointer;width:26px;height:26px;border-radius:7px;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:12px;color:{{ s.downFg }}" style-hover="background:rgba(255,255,255,.08)">↓</div>
+                </div>
+                <div onClick="{{ s.onPlay }}" style="cursor:pointer;font-size:12px;color:{{ accent }};padding:6px 11px;border:1px solid {{ accent40 }};border-radius:8px;font-weight:600" style-hover="background:{{ accent10 }}">Play ▸</div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ queueEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:26px 0;text-align:center;font-size:13px;color:rgba(255,255,255,.4)">Queue is empty</div>
+            </sc-if>
+            <sc-if value="{{ hasPlayed }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.3);padding:16px 0 6px">PLAYED · clears when session ends</div>
+              <sc-for list="{{ played }}" as="p" hint-placeholder-count="2">
+                <div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);opacity:.45">
+                  <div style="font-size:12px;color:rgba(255,255,255,.4);width:18px">✓</div>
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+                    <div style="font-size:14px;font-weight:500;text-decoration:line-through">{{ p.title }}</div>
+                    <div style="font-size:12px;color:rgba(255,255,255,.5)">{{ p.artist }} · {{ p.at }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </sc-if>
+          </div>
+          <div style="padding:10px 24px 14px;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;font-size:12.5px;color:rgba(255,255,255,.5)">
+            <div style="display:flex;align-items:flex-end;gap:2px;height:12px;width:16px"><div style="flex:1;height:100%;background:{{ accent }};border-radius:1px;transform-origin:bottom;animation:eqbar 0.7s ease-in-out -0.2s infinite alternate"></div><div style="flex:1;height:100%;background:{{ accent }};border-radius:1px;transform-origin:bottom;animation:eqbar 0.6s ease-in-out -0.5s infinite alternate"></div><div style="flex:1;height:100%;background:{{ accent }};border-radius:1px;transform-origin:bottom;animation:eqbar 0.8s ease-in-out -0.1s infinite alternate"></div></div>
+            Now playing: <span style="color:#f2f2ef;font-weight:600">{{ nowTitle }}</span> · {{ nowSub }}
+          </div>
+        </div>
+      </div>
+      </sc-if>
+      <sc-if value="{{ viewHistory }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:12px;padding:18px 24px">
+          <div style="font-size:11px;font-weight:600;letter-spacing:.12em;color:rgba(255,255,255,.4)">PAST SESSIONS</div>
+          <sc-if value="{{ noSessions }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:26px 0;text-align:center;font-size:13px;color:rgba(255,255,255,.4)">No sessions yet — end tonight's session to save it here.</div>
+          </sc-if>
+          <sc-for list="{{ sessions }}" as="h" hint-placeholder-count="2">
+            <div style="display:flex;flex-direction:column;gap:10px;padding:16px 18px;background:#16161a;border-radius:14px">
+              <div style="display:flex;align-items:baseline;gap:12px">
+                <div style="font-size:15px;font-weight:600">{{ h.venue }}</div>
+                <div style="font-size:12.5px;color:rgba(255,255,255,.45)">{{ h.date }}</div>
+                <div style="margin-left:auto;display:flex;gap:14px;font-size:12.5px;color:rgba(255,255,255,.6)">
+                  <span>{{ h.requests }} requests</span>
+                  <span>{{ h.playedCount }} played</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:10px">
+                <div style="flex:1;display:flex;flex-direction:column;gap:2px;padding:10px 12px;background:#0a0a0c;border-radius:10px">
+                  <div style="font-size:10.5px;letter-spacing:.1em;color:rgba(255,255,255,.4)">VENMO</div>
+                  <div style="font-size:16px;font-weight:700;color:{{ accent }}">{{ h.venmo }}</div>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:2px;padding:10px 12px;background:#0a0a0c;border-radius:10px">
+                  <div style="font-size:10.5px;letter-spacing:.1em;color:rgba(255,255,255,.4)">CASH APP</div>
+                  <div style="font-size:16px;font-weight:700;color:{{ accent }}">{{ h.cash }}</div>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:2px;padding:10px 12px;background:#0a0a0c;border-radius:10px">
+                  <div style="font-size:10.5px;letter-spacing:.1em;color:rgba(255,255,255,.4)">TOTAL TIPS</div>
+                  <div style="font-size:16px;font-weight:700;color:#f2f2ef">{{ h.total }}</div>
+                </div>
+              </div>
+              <div style="font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.5">{{ h.songs }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+</x-import>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#c8f542&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#c8f542&quot;,&quot;#5ce1e6&quot;,&quot;#ff6ec7&quot;,&quot;#ffb02e&quot;],&quot;section&quot;:&quot;Theme&quot;},&quot;venueName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Club Velour · Fri&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Demo setup&quot;},&quot;startLive&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Demo setup&quot;}}">
+class Component extends DCLogic {
+  state = {
+    stage: 'login', live: null,
+    now: { title: 'Midnight City', sub: 'M83 · requested by Ana' },
+    queue: [
+      { id: 1, title: 'One More Time', artist: 'Daft Punk', votes: 31, boosted: true },
+      { id: 2, title: 'Dance Yrself Clean', artist: 'LCD Soundsystem', votes: 24, boosted: false },
+      { id: 3, title: 'Heat Waves', artist: 'Glass Animals', votes: 18, boosted: false },
+      { id: 4, title: 'Levitating', artist: 'Dua Lipa', votes: 12, boosted: false },
+    ],
+    incoming: [
+      { id: 100, title: 'Pump Up the Jam', artist: 'Technotronic', from: 'Marco', tip: 5, note: 'For Jess — it’s her birthday!!', pay: 'Venmo' },
+      { id: 101, title: 'Blinding Lights', artist: 'The Weeknd', from: 'Sam', tip: 0, note: '', pay: '' },
+    ],
+    voted: {}, tipsVenmo: 96, tipsCash: 68, sheet: false, search: '', sel: null, ded: '', tip: 0, pay: 'Venmo', toast: '', nextId: 200,
+    view: 'tonight', played: [], reqTotal: 27,
+    notifs: [], notifOpen: false, unread: 0, mine: {}, chime: true, noteOk: {}, manual: false,
+    sessions: [
+      { venue: 'Club Velour', date: 'Sat · Jul 11', requests: 41, playedCount: 18, venmo: '$142', cash: '$85', total: '$227', songs: 'One More Time · Levitating · Da Funk · Groove Is in the Heart · +14 more' },
+      { venue: 'Rooftop @ The Standard', date: 'Fri · Jul 3', requests: 23, playedCount: 12, venmo: '$64', cash: '$40', total: '$104', songs: 'Blinding Lights · Everybody Dance · Midnight City · +9 more' },
+    ],
+  };
+  catalog = [
+    { title: 'Glass', artist: 'Animal Collective' },
+    { title: 'Heat Waves', artist: 'Glass Animals' },
+    { title: 'One More Time', artist: 'Daft Punk' },
+    { title: 'Da Funk', artist: 'Daft Punk' },
+    { title: 'Around the World', artist: 'Daft Punk' },
+    { title: 'Blinding Lights', artist: 'The Weeknd' },
+    { title: 'Levitating', artist: 'Dua Lipa' },
+    { title: 'Dance Yrself Clean', artist: 'LCD Soundsystem' },
+    { title: 'Midnight City', artist: 'M83' },
+    { title: 'Groove Is in the Heart', artist: 'Deee-Lite' },
+    { title: 'Everybody Dance', artist: 'CHIC' },
+    { title: 'On the Floor', artist: 'Jennifer Lopez' },
+  ];
+  searchApple(q) {
+    clearTimeout(this._st);
+    if (!q) { this.setState({ apiResults: null, searching: false }); return; }
+    this._st = setTimeout(async () => {
+      this.setState({ searching: true });
+      try {
+        const r = await fetch('https://itunes.apple.com/search?media=music&entity=song&limit=8&term=' + encodeURIComponent(q));
+        const j = await r.json();
+        if (this.state.search.trim() !== q) return; // stale
+        this.setState({
+          searching: false,
+          apiResults: j.results.map(t => ({ title: t.trackName, artist: t.artistName, art: t.artworkUrl100 })),
+        });
+      } catch (e) {
+        this.setState({ searching: false, apiResults: null }); // fall back to mock catalog
+      }
+    }, 350);
+  }
+  pushNotif(msg) {
+    const at = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    this.setState(st => ({ notifs: [{ msg, at }, ...st.notifs], unread: st.unread + 1 }));
+    this.showToast(msg);
+  }
+  showToast(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._tt);
+    this._tt = setTimeout(() => this.setState({ toast: '' }), 2600);
+  }
+  renderVals() {
+    const s = this.state;
+    const AC = this.props.accent ?? '#c8f542';
+    const _c = [parseInt(AC.slice(1,3),16), parseInt(AC.slice(3,5),16), parseInt(AC.slice(5,7),16)];
+    const aa = a => 'rgba(' + _c[0] + ',' + _c[1] + ',' + _c[2] + ',' + a + ')';
+    const live = s.live ?? (this.props.startLive ?? true);
+    const sorted = s.manual ? s.queue : [...s.queue].sort((a, b) => (b.boosted - a.boosted) || (b.votes - a.votes));
+    const moveTo = (from, to) => {
+      if (to < 0 || to >= sorted.length) return;
+      const arr = [...sorted];
+      arr.splice(to, 0, arr.splice(from, 1)[0]);
+      this.setState({ queue: arr, manual: true });
+    };
+    const q = s.search.trim().toLowerCase();
+    const base = s.apiResults != null ? s.apiResults
+      : (q ? this.catalog.filter(c => (c.title + ' ' + c.artist).toLowerCase().includes(q)) : this.catalog.slice(0, 6));
+    const results = base.map(c => ({
+      ...c, init: c.title.slice(0, 2).toUpperCase(), art: c.art || false, noArt: !c.art,
+      artStyle: c.art ? { width: 44, height: 44, borderRadius: 8, background: '#1c1c22 url(' + c.art + ') center/cover' } : undefined,
+      onPick: () => this.setState({ sel: c }),
+    }));
+    const tipChips = [{ label: 'No tip', v: 0 }, { label: '$2', v: 2 }, { label: '$5 · Boost', v: 5 }].map(t => {
+      const on = s.tip === t.v;
+      return { label: t.label, onPick: () => this.setState({ tip: t.v }),
+        border: on ? AC : 'rgba(255,255,255,.15)', bg: on ? aa(.12) : 'transparent',
+        fg: on ? AC : 'rgba(255,255,255,.7)', weight: on ? 600 : 400 };
+    });
+    const venue = s.venue ?? (this.props.venueName ?? 'Club Velour · Fri').split(' · ')[0];
+    const todayLabel = new Date().toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+    return {
+      accent: AC, accent10: aa(.1), accent12: aa(.12), accent15: aa(.15), accent35: aa(.35), accent40: aa(.4), accent50: aa(.5),
+      notifOpen: s.notifOpen, notifs: s.notifs, noNotifs: s.notifs.length === 0,
+      hasUnread: s.unread > 0, unread: s.unread,
+      toggleNotifs: () => this.setState(st => ({ notifOpen: !st.notifOpen, unread: st.notifOpen ? st.unread : 0 })),
+      hasIncoming: s.incoming.length > 0,
+      toggleChime: () => this.setState(st => ({ chime: !st.chime })),
+      chimeLabel: s.chime ? '🔊 Chime on' : '🔇 Chime off',
+      chimeFg: s.chime ? AC : 'rgba(255,255,255,.4)',
+      venue, onVenue: e => this.setState({ venue: e.target.value }), todayLabel,
+      venueName: venue + ' · ' + todayLabel,
+      live, offline: !live,
+      liveBg: live ? AC : 'transparent', liveFg: live ? '#0a0a0c' : 'rgba(255,255,255,.5)',
+      liveDot: live ? '#0a0a0c' : 'rgba(255,255,255,.35)',
+      offBg: live ? 'transparent' : 'rgba(255,255,255,.12)', offFg: live ? 'rgba(255,255,255,.5)' : '#f2f2ef',
+      offWeight: live ? 400 : 700,
+      liveHint: live ? 'Guests can send requests' : 'Requests are closed for guests',
+      goLive: () => this.setState({ live: true }),
+      goOffline: () => this.setState({ live: false }),
+      loggedOut: s.stage === 'login', loggedIn: s.stage === 'booth',
+      signIn: () => this.setState({ stage: 'booth' }),
+      nowTitle: s.now.title, nowSub: s.now.sub,
+      queueEmpty: sorted.length === 0,
+      guestQueue: sorted.map(item => {
+        const v = !!s.voted[item.id];
+        return { ...item,
+          voteBg: v ? aa(.12) : 'transparent',
+          voteBorder: v ? aa(.5) : 'rgba(255,255,255,.15)',
+          voteFg: v ? AC : 'rgba(255,255,255,.7)',
+          onVote: () => this.setState(st => ({
+            voted: { ...st.voted, [item.id]: !v },
+            queue: st.queue.map(x => x.id === item.id ? { ...x, votes: x.votes + (v ? -1 : 1) } : x),
+          })),
+        };
+      }),
+      manual: s.manual,
+      orderHint: s.manual ? 'manual order' : 'sorted by votes · ↑↓ to take over',
+      autoSort: () => this.setState({ manual: false }),
+      djQueue: sorted.map((item, i) => ({ ...item,
+        n: String(i + 1).padStart(2, '0'),
+        boostTag: item.boosted ? ' · BOOSTED' : '',
+        onUp: () => moveTo(i, i - 1), onDown: () => moveTo(i, i + 1),
+        upFg: i === 0 ? 'rgba(255,255,255,.2)' : 'rgba(255,255,255,.6)',
+        downFg: i === sorted.length - 1 ? 'rgba(255,255,255,.2)' : 'rgba(255,255,255,.6)',
+        onPlay: () => this.setState(st => {
+          const rest = st.queue.filter(x => x.id !== item.id);
+          const top = st.manual ? rest[0] : [...rest].sort((a, b) => (b.boosted - a.boosted) || (b.votes - a.votes))[0];
+          if (st.mine[item.id]) setTimeout(() => this.pushNotif('Your song "' + item.title + '" is playing now 🎉'), 0);
+          if (top && st.mine[top.id]) setTimeout(() => this.pushNotif('Your song "' + top.title + '" is up next!'), 0);
+          return {
+            now: { title: item.title, sub: item.artist + ' · from the queue' },
+            queue: rest,
+            played: [{ title: st.now.title, artist: st.now.sub.split(' · ')[0], at: new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) }, ...st.played],
+          };
+        }),
+      })),
+      hasPlayed: s.played.length > 0, played: s.played,
+      viewTonight: s.view === 'tonight', viewHistory: s.view === 'history',
+      showTonight: () => this.setState({ view: 'tonight' }),
+      showHistory: () => this.setState({ view: 'history' }),
+      tabTonightBg: s.view === 'tonight' ? 'rgba(255,255,255,.12)' : 'transparent',
+      tabTonightFg: s.view === 'tonight' ? '#f2f2ef' : 'rgba(255,255,255,.5)',
+      tabHistoryBg: s.view === 'history' ? 'rgba(255,255,255,.12)' : 'transparent',
+      tabHistoryFg: s.view === 'history' ? '#f2f2ef' : 'rgba(255,255,255,.5)',
+      sessions: s.sessions, noSessions: s.sessions.length === 0,
+      endSession: () => this.setState(st => {
+        const playedAll = [{ title: st.now.title, artist: '' }, ...st.played];
+        const names = playedAll.slice(0, 4).map(p => p.title).join(' · ') + (playedAll.length > 4 ? ' · +' + (playedAll.length - 4) + ' more' : '');
+        return {
+          sessions: [{
+            venue: venue,
+            date: todayLabel, requests: st.reqTotal, playedCount: playedAll.length,
+            venmo: '$' + st.tipsVenmo, cash: '$' + st.tipsCash, total: '$' + (st.tipsVenmo + st.tipsCash), songs: names,
+          }, ...st.sessions],
+          played: [], tipsVenmo: 0, tipsCash: 0, reqTotal: 0, incoming: [], live: false, view: 'history',
+        };
+      }),
+      hasTip: s.tip > 0,
+      payChips: ['Venmo', 'Cash App'].map(p => {
+        const on = s.pay === p;
+        return { label: p, onPick: () => this.setState({ pay: p }),
+          border: on ? AC : 'rgba(255,255,255,.15)', bg: on ? aa(.12) : 'transparent',
+          fg: on ? AC : 'rgba(255,255,255,.7)', weight: on ? 600 : 400 };
+      }),
+      sheetOpen: s.sheet,
+      openSheet: () => this.setState({ sheet: true, search: '', sel: null, ded: '', tip: 0 }),
+      closeSheet: () => this.setState({ sheet: false }),
+      search: s.search,
+      onSearch: e => { const v = e.target.value; this.setState({ search: v }); this.searchApple(v.trim()); },
+      results, noResults: results.length === 0 && !s.searching, searching: !!s.searching,
+      searchHint: s.apiResults != null ? 'Apple Music catalog' : 'Suggestions',
+      noSel: !s.sel, hasSel: !!s.sel,
+      selTitle: s.sel ? s.sel.title : '', selArtist: s.sel ? s.sel.artist : '',
+      selArt: !!(s.sel && s.sel.art),
+      selArtStyle: s.sel && s.sel.art ? { width: 84, height: 84, borderRadius: 12, flex: 'none', background: '#1c1c22 url(' + s.sel.art.replace('100x100', '300x300') + ') center/cover', boxShadow: '0 6px 24px rgba(0,0,0,.5)' } : undefined,
+      clearSel: () => this.setState({ sel: null }),
+      ded: s.ded, onDed: e => this.setState({ ded: e.target.value }),
+      tipChips,
+      sendLabel: s.tip ? 'Send request · $' + s.tip : 'Send request',
+      sendRequest: () => {
+        if (!s.sel) return;
+        const key = (s.sel.title + '|' + s.sel.artist).toLowerCase();
+        const inQueue = s.queue.find(x => (x.title + '|' + x.artist).toLowerCase() === key);
+        if (inQueue) {
+          this.setState(st => ({
+            queue: st.queue.map(x => x.id === inQueue.id ? { ...x, votes: x.votes + 1 } : x),
+            voted: { ...st.voted, [inQueue.id]: true },
+            sheet: false, sel: null, ded: '', tip: 0, search: '',
+          }));
+          this.showToast('Already in the queue — we added your vote ▲');
+          return;
+        }
+        const inInc = s.incoming.find(x => (x.title + '|' + x.artist).toLowerCase() === key);
+        if (inInc) {
+          this.setState(st => ({
+            incoming: st.incoming.map(x => x.id === inInc.id ? { ...x, count: (x.count || 1) + 1, tip: x.tip + s.tip } : x),
+            mine: { ...st.mine, [inInc.id]: true },
+            sheet: false, sel: null, ded: '', tip: 0, search: '', reqTotal: st.reqTotal + 1,
+          }));
+          this.showToast('Someone beat you to it — we bumped that request ✓');
+          return;
+        }
+        this.setState(st => ({
+          incoming: [{ id: st.nextId, title: s.sel.title, artist: s.sel.artist, from: 'You', tip: s.tip, note: s.ded.trim(), pay: s.tip ? s.pay : '' }, ...st.incoming],
+          nextId: st.nextId + 1, sheet: false, sel: null, ded: '', tip: 0, search: '', reqTotal: st.reqTotal + 1,
+          mine: { ...st.mine, [st.nextId]: true },
+        }));
+        this.showToast('Request sent — waiting for the DJ ✓');
+      },
+      reqCount: s.incoming.length, tipsVenmo: '$' + s.tipsVenmo, tipsCash: '$' + s.tipsCash,
+      incomingEmpty: s.incoming.length === 0,
+      incoming: s.incoming.map(r => {
+        const ok = !!s.noteOk[r.id];
+        return { ...r,
+        meta: (r.count > 1 ? r.count + ' people' : r.from) + ' · just now',
+        tipLabel: r.tip ? '$' + r.tip + ' · ' + r.pay : false,
+        border: r.tip >= 5 ? aa(.4) : 'rgba(255,255,255,.08)',
+        noteOpacity: ok ? 1 : .45,
+        noteLabel: ok ? '✓ Note approved' : 'Approve note',
+        noteBorder: ok ? aa(.5) : 'rgba(255,255,255,.2)',
+        noteFg: ok ? AC : 'rgba(255,255,255,.5)',
+        onToggleNote: () => this.setState(st => ({ noteOk: { ...st.noteOk, [r.id]: !ok } })),
+        onAccept: () => this.setState(st => {
+          const song = { id: r.id, title: r.title, artist: r.artist, votes: r.count > 1 ? r.count : 0, boosted: r.tip >= 5, note: ok ? r.note : '' };
+          if (st.mine[r.id]) setTimeout(() => this.pushNotif('Your request "' + r.title + '" was accepted ✓'), 0);
+          return { incoming: st.incoming.filter(x => x.id !== r.id), queue: [...st.queue, song],
+            tipsVenmo: st.tipsVenmo + (r.pay === 'Venmo' ? r.tip : 0),
+            tipsCash: st.tipsCash + (r.pay === 'Cash App' ? r.tip : 0) };
+        }),
+        onDecline: () => this.setState(st => ({ incoming: st.incoming.filter(x => x.id !== r.id) })),
+      };}),
+      toast: s.toast,
+    };
+  }
+}
+</script>
+</body>
+</html>
