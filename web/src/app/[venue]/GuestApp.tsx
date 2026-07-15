@@ -162,7 +162,11 @@ export function GuestApp({
         p_note: dedication.trim(),
       });
       if (error) {
-        showToast("Couldn't send that — try again");
+        if (error.message.includes("rate_limited")) {
+          showToast("You've got 2 requests waiting already — hang tight for the DJ");
+        } else {
+          showToast("Couldn't send that — try again");
+        }
         return;
       }
       setSheetOpen(false);
