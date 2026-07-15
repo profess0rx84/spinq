@@ -60,6 +60,8 @@ export function GuestApp({
   const [sel, setSel] = useState<Picked | null>(null);
   const [dedication, setDedication] = useState("");
   const [tip, setTip] = useState(0);
+  const [customTipOpen, setCustomTipOpen] = useState(false);
+  const [customTipValue, setCustomTipValue] = useState("");
   const [pay, setPay] = useState<"Venmo" | "Cash App">("Venmo");
   const [toast, setToast] = useState("");
   const [sending, setSending] = useState(false);
@@ -111,6 +113,8 @@ export function GuestApp({
     setSel(null);
     setDedication("");
     setTip(0);
+    setCustomTipOpen(false);
+    setCustomTipValue("");
   }
   function closeSheet() {
     setSheetOpen(false);
@@ -134,7 +138,8 @@ export function GuestApp({
     }, 350);
   }
 
-  const results = apiResults != null ? apiResults : mockResults(search);
+  const hasQuery = search.trim().length > 0;
+  const results = apiResults != null ? apiResults : hasQuery ? mockResults(search) : [];
   const searchHint = apiResults != null ? "Apple Music catalog" : "Suggestions";
 
   function openPaymentIfNeeded() {
@@ -326,12 +331,14 @@ export function GuestApp({
 
           {!sel && (
             <div className="min-h-0 flex-1 overflow-auto px-5">
-              <div className="flex items-center justify-between pb-1.5 pt-0.5">
-                <div className="text-[10.5px] font-semibold uppercase tracking-[.12em] text-text-4">
-                  {searchHint}
+              {hasQuery && (
+                <div className="flex items-center justify-between pb-1.5 pt-0.5">
+                  <div className="text-[10.5px] font-semibold uppercase tracking-[.12em] text-text-4">
+                    {searchHint}
+                  </div>
+                  {searching && <div className="text-[11px] text-accent">searching…</div>}
                 </div>
-                {searching && <div className="text-[11px] text-accent">searching…</div>}
-              </div>
+              )}
               {results.map((song, i) => (
                 <div
                   key={i}
@@ -353,7 +360,7 @@ export function GuestApp({
                   <div className="rounded-full bg-white/10 px-3.5 py-2 text-[12.5px] font-semibold">Pick</div>
                 </div>
               ))}
-              {results.length === 0 && !searching && (
+              {hasQuery && results.length === 0 && !searching && (
                 <div className="py-[26px] text-center text-[13px] text-text-3">No matches — try another search</div>
               )}
             </div>
@@ -397,11 +404,14 @@ export function GuestApp({
                     { label: "$2", v: 2 },
                     { label: "$5 · Boost", v: 5 },
                   ].map((t) => {
-                    const on = tip === t.v;
+                    const on = !customTipOpen && tip === t.v;
                     return (
                       <div
                         key={t.v}
-                        onClick={() => setTip(t.v)}
+                        onClick={() => {
+                          setCustomTipOpen(false);
+                          setTip(t.v);
+                        }}
                         className="flex-1 cursor-pointer rounded-[10px] border py-2.5 text-center text-[13px]"
                         style={{
                           borderColor: on ? "var(--accent)" : "var(--border-2)",
@@ -414,7 +424,39 @@ export function GuestApp({
                       </div>
                     );
                   })}
+                  <div
+                    onClick={() => {
+                      setCustomTipOpen(true);
+                      setCustomTipValue(tip > 0 ? String(tip) : "");
+                    }}
+                    className="flex-1 cursor-pointer rounded-[10px] border py-2.5 text-center text-[13px]"
+                    style={{
+                      borderColor: customTipOpen ? "var(--accent)" : "var(--border-2)",
+                      background: customTipOpen ? "var(--accent-12)" : "transparent",
+                      color: customTipOpen ? "var(--accent)" : "rgba(255,255,255,.7)",
+                      fontWeight: customTipOpen ? 600 : 400,
+                    }}
+                  >
+                    Custom
+                  </div>
                 </div>
+                {customTipOpen && (
+                  <div className="flex items-center gap-2 rounded-[10px] bg-bg px-3 py-1">
+                    <span className="text-[14px] text-text-2">$</span>
+                    <input
+                      value={customTipValue}
+                      onChange={(e) => {
+                        const raw = e.target.value.replace(/[^0-9]/g, "");
+                        setCustomTipValue(raw);
+                        setTip(raw ? parseInt(raw, 10) : 0);
+                      }}
+                      inputMode="numeric"
+                      placeholder="Enter amount"
+                      autoFocus
+                      className="flex-1 bg-transparent py-2.5 text-[13.5px] text-text placeholder:text-text-4"
+                    />
+                  </div>
+                )}
                 {tip > 0 && (
                   <div className="flex items-center gap-2">
                     <div className="text-[12px] text-text-2">Pay with</div>

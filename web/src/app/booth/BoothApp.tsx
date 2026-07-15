@@ -39,7 +39,12 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
   const [history, setHistory] = useState<SessionHistoryRow[]>([]);
   const [venueName, setVenueName] = useState(initialSession.venue_name);
   const [venueNameSessionId, setVenueNameSessionId] = useState(currentSessionId);
+  const [venueSaveState, setVenueSaveState] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const venueTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  useEffect(() => {
+    return () => clearTimeout(venueTimer.current);
+  }, []);
 
   // Local editable copy of the venue name resets when the booth switches to
   // a different session (e.g. "End session" opens a fresh one) — adjusted
@@ -69,9 +74,16 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
 
   function onVenueNameChange(value: string) {
     setVenueName(value);
+    setVenueSaveState("idle");
     clearTimeout(venueTimer.current);
-    venueTimer.current = setTimeout(() => {
-      supabase.rpc("set_venue_name", { p_session_id: currentSessionId, p_venue_name: value });
+    venueTimer.current = setTimeout(async () => {
+      setVenueSaveState("saving");
+      const { error } = await supabase.rpc("set_venue_name", {
+        p_session_id: currentSessionId,
+        p_venue_name: value,
+      });
+      setVenueSaveState(error ? "error" : "saved");
+      if (!error) refetchSession();
     }, 400);
   }
 
@@ -213,6 +225,9 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
             className="w-[130px] bg-transparent text-[13px] font-semibold text-text"
           />
           <span className="text-[12px] text-text-3">{todayLabel()}</span>
+          {venueSaveState === "saving" && <span className="text-[11px] text-text-4">saving…</span>}
+          {venueSaveState === "saved" && <span className="text-[11px] text-accent">saved ✓</span>}
+          {venueSaveState === "error" && <span className="text-[11px] text-red-400">couldn&apos;t save</span>}
         </div>
         <div className="text-[12.5px] text-text-3">
           {live ? "Guests can send requests" : "Requests are closed for guests"}
