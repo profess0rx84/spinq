@@ -46,6 +46,10 @@ Supabase CLI: `supabase link` then `supabase db push`.)
 This creates all tables, RLS policies, and RPC functions, and adds the
 realtime tables to the `supabase_realtime` publication.
 
+If you're updating an existing project rather than starting fresh, also
+run any newer files in `supabase/migrations/` (e.g. `0002_payment_handles.sql`)
+that you haven't applied yet — same steps, just paste and run.
+
 ### 3. Enable anonymous sign-ins
 
 Guests never create an account or type a name — they get a transparent
@@ -90,11 +94,10 @@ follow-ups rather than built now:
 - **Music search** uses the free, keyless iTunes Search API (same as the
   original prototype). Swapping in Apple MusicKit or the Spotify Web API
   is a drop-in replacement of `src/lib/itunes.ts`.
-- **Tips are declared amounts, not real payments.** The request sheet
-  records "$5 via Venmo," but there's no deep link to venmo.com or
-  Cash.app yet, and no DJ settings page to configure payment handles
-  (the `dj_profiles.venmo_handle` / `cashapp_handle` columns exist and
-  are ready for this).
+- ~~Tips are declared amounts, not real payments~~ — **done**: the DJ sets
+  a Venmo/Cash App handle from the booth header ("💳 Payment info"), and
+  guests who tip get sent straight to a venmo.com/cash.app payment screen
+  after sending their request.
 - **No guest rate limiting** (spec called for max 2 pending requests per
   guest — not enforced yet).
 - **Accent color theming**: the design supports lime/cyan/pink/amber

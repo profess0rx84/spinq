@@ -112,6 +112,10 @@ export type Database = {
       get_open_session: { Args: { p_venue_slug: string }; Returns: Session };
       get_session_public_stats: { Args: { p_session_id: string }; Returns: { req_total: number; voters: number }[] };
       get_session_history: { Args: { p_dj_id: string }; Returns: SessionHistoryRow[] };
+      get_payment_handles: {
+        Args: { p_venue_slug: string };
+        Returns: { venmo_handle: string | null; cashapp_handle: string | null }[];
+      };
       submit_request: {
         Args: {
           p_session_id: string; p_title: string; p_artist: string; p_art_url: string | null;

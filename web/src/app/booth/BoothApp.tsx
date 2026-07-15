@@ -8,6 +8,7 @@ import { todayLabel, relativeLabel, dateLabel } from "@/lib/format";
 import { EqBars } from "@/components/EqBars";
 import { SectionLabel } from "@/components/SectionLabel";
 import { QrCode } from "@/components/QrCode";
+import { cleanHandle } from "@/lib/payments";
 import type {
   DjProfile,
   Session,
@@ -144,6 +145,24 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
     setTimeout(() => setCopied(false), 2000);
   }
 
+  const [payOpen, setPayOpen] = useState(false);
+  const [venmoHandle, setVenmoHandle] = useState(profile.venmo_handle ?? "");
+  const [cashHandle, setCashHandle] = useState(profile.cashapp_handle ?? "");
+  const [paySaved, setPaySaved] = useState(false);
+
+  async function savePaymentHandles() {
+    const venmo = cleanHandle(venmoHandle);
+    const cash = cleanHandle(cashHandle);
+    setVenmoHandle(venmo);
+    setCashHandle(cash);
+    await supabase
+      .from("dj_profiles")
+      .update({ venmo_handle: venmo || null, cashapp_handle: cash || null })
+      .eq("id", profile.id);
+    setPaySaved(true);
+    setTimeout(() => setPaySaved(false), 2000);
+  }
+
   if (!session) return null;
   const live = session.is_live;
 
@@ -222,6 +241,51 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
               >
                 Open big screen display ↗
               </a>
+            </div>
+          )}
+        </div>
+        <div className="relative">
+          <div
+            onClick={() => setPayOpen((v) => !v)}
+            className="cursor-pointer rounded-[9px] border border-border-3 px-3 py-1.5 text-[12.5px] text-white/65 hover:bg-white/[.06]"
+          >
+            💳 Payment info
+          </div>
+          {payOpen && (
+            <div className="absolute left-0 top-[calc(100%+8px)] z-20 flex w-[260px] flex-col gap-3 rounded-[14px] border border-border-2 bg-surface-2 p-4 shadow-[0_12px_40px_rgba(0,0,0,.6)]">
+              <div className="flex items-center justify-between">
+                <SectionLabel>Payment handles</SectionLabel>
+                <div onClick={() => setPayOpen(false)} className="cursor-pointer text-[12px] text-text-3">
+                  close
+                </div>
+              </div>
+              <div className="text-[11.5px] leading-[1.4] text-text-3">
+                Guests who tip get sent straight here to pay — no fees, no middleman.
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <div className="text-[11px] text-text-3">Venmo username</div>
+                <input
+                  value={venmoHandle}
+                  onChange={(e) => setVenmoHandle(e.target.value)}
+                  placeholder="e.g. dj-nova"
+                  className="rounded-[10px] bg-bg px-3 py-2.5 text-[13px] text-text placeholder:text-text-4"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <div className="text-[11px] text-text-3">Cash App $cashtag</div>
+                <input
+                  value={cashHandle}
+                  onChange={(e) => setCashHandle(e.target.value)}
+                  placeholder="e.g. djnova"
+                  className="rounded-[10px] bg-bg px-3 py-2.5 text-[13px] text-text placeholder:text-text-4"
+                />
+              </div>
+              <div
+                onClick={savePaymentHandles}
+                className="cursor-pointer rounded-[10px] bg-accent py-2.5 text-center text-[13px] font-bold text-on-accent"
+              >
+                {paySaved ? "Saved ✓" : "Save"}
+              </div>
             </div>
           )}
         </div>

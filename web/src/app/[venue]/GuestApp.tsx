@@ -7,6 +7,7 @@ import { ensureGuestId } from "@/lib/guest";
 import { sortQueue } from "@/lib/queue";
 import { todayLabel, timeLabel } from "@/lib/format";
 import { mockResults, searchAppleMusic, type CatalogSong } from "@/lib/itunes";
+import { venmoLink, cashAppLink } from "@/lib/payments";
 import { EqBars } from "@/components/EqBars";
 import { Toast } from "@/components/Toast";
 import type { Session, QueueItem, Vote, Notification } from "@/lib/supabase/types";
@@ -27,6 +28,22 @@ export function GuestApp({
   useEffect(() => {
     ensureGuestId().then(setGuestId);
   }, []);
+
+  const [payHandles, setPayHandles] = useState<{ venmo_handle: string | null; cashapp_handle: string | null }>({
+    venmo_handle: null,
+    cashapp_handle: null,
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+    supabase.rpc("get_payment_handles", { p_venue_slug: venueSlug }).then(({ data }) => {
+      const row = Array.isArray(data) ? data[0] : data;
+      if (!cancelled && row) setPayHandles(row);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [supabase, venueSlug]);
 
   const [queueItems, refetchQueue] = useTableRows<QueueItem>("queue_items", "session_id", session?.id ?? null);
   const [votes, refetchVotes] = useTableRows<Vote>("votes", "session_id", session?.id ?? null);
@@ -120,6 +137,15 @@ export function GuestApp({
   const results = apiResults != null ? apiResults : mockResults(search);
   const searchHint = apiResults != null ? "Apple Music catalog" : "Suggestions";
 
+  function openPaymentIfNeeded() {
+    if (tip <= 0) return;
+    if (pay === "Venmo" && payHandles.venmo_handle) {
+      window.open(venmoLink(payHandles.venmo_handle, tip, sel ? `${sel.title} — ${sel.artist}` : "song request"), "_blank");
+    } else if (pay === "Cash App" && payHandles.cashapp_handle) {
+      window.open(cashAppLink(payHandles.cashapp_handle, tip), "_blank");
+    }
+  }
+
   async function sendRequest() {
     if (!sel || !session || !guestId || sending) return;
     setSending(true);
@@ -146,8 +172,10 @@ export function GuestApp({
         refetchVotes();
       } else if (status === "merged_pending") {
         showToast("Someone beat you to it — we bumped that request ✓");
+        openPaymentIfNeeded();
       } else {
         showToast("Request sent — waiting for the DJ ✓");
+        openPaymentIfNeeded();
       }
     } finally {
       setSending(false);
