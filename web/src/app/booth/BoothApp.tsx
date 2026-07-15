@@ -21,14 +21,14 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
   const supabase = useSupabaseClient();
   const router = useRouter();
   const [currentSessionId, setCurrentSessionId] = useState(initialSession.id);
-  const session = useTableRow<Session>("sessions", currentSessionId, initialSession);
-  const tips = useTableRow<SessionTips>("session_tips", currentSessionId, null, "session_id");
-  const incoming = useTableRows<IncomingRequest>("incoming_requests", "session_id", currentSessionId, {
+  const [session, refetchSession] = useTableRow<Session>("sessions", currentSessionId, initialSession);
+  const [tips, refetchTips] = useTableRow<SessionTips>("session_tips", currentSessionId, null, "session_id");
+  const [incoming, refetchIncoming] = useTableRows<IncomingRequest>("incoming_requests", "session_id", currentSessionId, {
     column: "created_at",
     ascending: false,
   });
-  const queueItems = useTableRows<QueueItem>("queue_items", "session_id", currentSessionId);
-  const playedItems = useTableRows<PlayedItem>("played_items", "session_id", currentSessionId, {
+  const [queueItems, refetchQueue] = useTableRows<QueueItem>("queue_items", "session_id", currentSessionId);
+  const [playedItems, refetchPlayed] = useTableRows<PlayedItem>("played_items", "session_id", currentSessionId, {
     column: "played_at",
     ascending: false,
   });
@@ -73,28 +73,41 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
 
   async function goLive(live: boolean) {
     await supabase.rpc("set_live", { p_session_id: currentSessionId, p_live: live });
+    refetchSession();
   }
   async function toggleChime() {
     if (!session) return;
     await supabase.rpc("set_chime", { p_session_id: currentSessionId, p_enabled: !session.chime_enabled });
+    refetchSession();
   }
   async function accept(id: string) {
     await supabase.rpc("accept_request", { p_request_id: id });
+    refetchIncoming();
+    refetchQueue();
+    refetchTips();
   }
   async function decline(id: string) {
     await supabase.rpc("decline_request", { p_request_id: id });
+    refetchIncoming();
   }
   async function toggleNote(id: string) {
     await supabase.rpc("toggle_note_approval", { p_request_id: id });
+    refetchIncoming();
   }
   async function moveQueue(id: string, direction: "up" | "down") {
     await supabase.rpc("reorder_queue", { p_session_id: currentSessionId, p_queue_item_id: id, p_direction: direction });
+    refetchQueue();
+    refetchSession();
   }
   async function playItem(id: string) {
     await supabase.rpc("play_next", { p_session_id: currentSessionId, p_queue_item_id: id });
+    refetchQueue();
+    refetchPlayed();
+    refetchSession();
   }
   async function autoSort() {
     await supabase.rpc("autosort_queue", { p_session_id: currentSessionId });
+    refetchSession();
   }
   async function endSession() {
     const { data: newId } = await supabase.rpc("end_session", { p_session_id: currentSessionId });

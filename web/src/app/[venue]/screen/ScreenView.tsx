@@ -16,7 +16,7 @@ export function ScreenView({
 }) {
   const supabase = useSupabaseClient();
   const session = useOpenSessionBySlug(venueSlug, initialSession);
-  const queueItems = useTableRows<QueueItem>("queue_items", "session_id", session?.id ?? null);
+  const [queueItems] = useTableRows<QueueItem>("queue_items", "session_id", session?.id ?? null);
   const [stats, setStats] = useState({ req_total: initialSession.req_total, voters: 0 });
   const [origin, setOrigin] = useState("");
 

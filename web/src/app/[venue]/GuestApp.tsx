@@ -28,9 +28,9 @@ export function GuestApp({
     ensureGuestId().then(setGuestId);
   }, []);
 
-  const queueItems = useTableRows<QueueItem>("queue_items", "session_id", session?.id ?? null);
-  const votes = useTableRows<Vote>("votes", "session_id", session?.id ?? null);
-  const notifications = useTableRows<Notification>("notifications", "guest_id", guestId, {
+  const [queueItems, refetchQueue] = useTableRows<QueueItem>("queue_items", "session_id", session?.id ?? null);
+  const [votes, refetchVotes] = useTableRows<Vote>("votes", "session_id", session?.id ?? null);
+  const [notifications, refetchNotifications] = useTableRows<Notification>("notifications", "guest_id", guestId, {
     column: "created_at",
     ascending: false,
   });
@@ -62,6 +62,7 @@ export function GuestApp({
     setNotifOpen(opening);
     if (opening && guestId) {
       await supabase.from("notifications").update({ read: true }).eq("guest_id", guestId).eq("read", false);
+      refetchNotifications();
     }
   }
 
@@ -82,6 +83,8 @@ export function GuestApp({
       p_queue_item_id: item.id,
       p_guest_id: guestId,
     });
+    refetchQueue();
+    refetchVotes();
   }
 
   function openSheet() {
@@ -137,9 +140,15 @@ export function GuestApp({
         return;
       }
       setSheetOpen(false);
-      if (status === "queued_vote") showToast("Already in the queue — we added your vote ▲");
-      else if (status === "merged_pending") showToast("Someone beat you to it — we bumped that request ✓");
-      else showToast("Request sent — waiting for the DJ ✓");
+      if (status === "queued_vote") {
+        showToast("Already in the queue — we added your vote ▲");
+        refetchQueue();
+        refetchVotes();
+      } else if (status === "merged_pending") {
+        showToast("Someone beat you to it — we bumped that request ✓");
+      } else {
+        showToast("Request sent — waiting for the DJ ✓");
+      }
     } finally {
       setSending(false);
     }
