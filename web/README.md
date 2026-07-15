@@ -73,6 +73,12 @@ cp .env.example .env.local
 Fill in `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 from **Project Settings → API** in your Supabase dashboard.
 
+Fill in `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` from a free app at
+the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+(Create app → any name/description → no redirect URI needed, this only
+uses the Client Credentials flow for search, not user login). These stay
+server-side only — no `NEXT_PUBLIC_` prefix.
+
 ### 6. Run it
 
 ```bash
@@ -91,9 +97,10 @@ npm run dev
 Per scope agreed with the requester, these are intentionally left as
 follow-ups rather than built now:
 
-- **Music search** uses the free, keyless iTunes Search API (same as the
-  original prototype). Swapping in Apple MusicKit or the Spotify Web API
-  is a drop-in replacement of `src/lib/itunes.ts`.
+- ~~Music search uses the free, keyless iTunes Search API~~ — **done**:
+  search now runs against the Spotify Web API (`src/lib/spotify.ts` +
+  `src/app/api/search/route.ts`), requiring a free Spotify Developer app
+  (see setup step 5).
 - ~~Tips are declared amounts, not real payments~~ — **done**: the DJ sets
   a Venmo/Cash App handle from the booth header ("💳 Payment info"), and
   guests who tip get sent straight to a venmo.com/cash.app payment screen
