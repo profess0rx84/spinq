@@ -116,6 +116,7 @@ export type Database = {
         Args: { p_venue_slug: string };
         Returns: { venmo_handle: string | null; cashapp_handle: string | null }[];
       };
+      delete_session: { Args: { p_session_id: string }; Returns: void };
       submit_request: {
         Args: {
           p_session_id: string; p_title: string; p_artist: string; p_art_url: string | null;

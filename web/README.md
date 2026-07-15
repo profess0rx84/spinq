@@ -98,8 +98,8 @@ follow-ups rather than built now:
   a Venmo/Cash App handle from the booth header ("💳 Payment info"), and
   guests who tip get sent straight to a venmo.com/cash.app payment screen
   after sending their request.
-- **No guest rate limiting** (spec called for max 2 pending requests per
-  guest — not enforced yet).
+- ~~No guest rate limiting~~ — **done**: `submit_request()` caps a guest at
+  2 outstanding pending requests (voting doesn't count toward the cap).
 - **Accent color theming**: the design supports lime/cyan/pink/amber
   accents via CSS variables in `globals.css`, but there's no DJ-facing UI
   to switch it yet (defaults to lime, matching the prototype).

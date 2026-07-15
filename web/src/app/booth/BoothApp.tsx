@@ -60,6 +60,13 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
     };
   }, [supabase, profile.id, currentSessionId]);
 
+  async function deleteHistorySession(sessionId: string) {
+    if (!window.confirm("Delete this session permanently? This can't be undone.")) return;
+    await supabase.rpc("delete_session", { p_session_id: sessionId });
+    const { data } = await supabase.rpc("get_session_history", { p_dj_id: profile.id });
+    if (data) setHistory(data);
+  }
+
   function onVenueNameChange(value: string) {
     setVenueName(value);
     clearTimeout(venueTimer.current);
@@ -507,9 +514,15 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
               <div className="flex items-baseline gap-3">
                 <div className="text-[15px] font-semibold">{h.venue_name}</div>
                 <div className="text-[12.5px] text-text-3">{dateLabel(h.started_at)}</div>
-                <div className="ml-auto flex gap-3.5 text-[12.5px] text-text-2">
+                <div className="ml-auto flex items-center gap-3.5 text-[12.5px] text-text-2">
                   <span>{h.requests} requests</span>
                   <span>{h.played_count} played</span>
+                  <div
+                    onClick={() => deleteHistorySession(h.id)}
+                    className="cursor-pointer rounded-[7px] border border-border-2 px-2.5 py-1 text-[11.5px] text-text-3 hover:border-red-400/40 hover:text-red-400"
+                  >
+                    Delete
+                  </div>
                 </div>
               </div>
               <div className="flex gap-2.5">
