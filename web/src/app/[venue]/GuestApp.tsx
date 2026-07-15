@@ -6,7 +6,7 @@ import { useOpenSessionBySlug } from "@/lib/session";
 import { ensureGuestId } from "@/lib/guest";
 import { sortQueue } from "@/lib/queue";
 import { todayLabel, timeLabel } from "@/lib/format";
-import { mockResults, searchSpotify, type CatalogSong } from "@/lib/spotify";
+import { mockResults, searchAppleMusic, type CatalogSong } from "@/lib/itunes";
 import { venmoLink, cashAppLink } from "@/lib/payments";
 import { EqBars } from "@/components/EqBars";
 import { Toast } from "@/components/Toast";
@@ -127,7 +127,7 @@ export function GuestApp({
     }
     setSearching(true);
     searchTimer.current = setTimeout(async () => {
-      const results = await searchSpotify(q);
+      const results = await searchAppleMusic(q);
       if (search.trim() !== q) return;
       setSearching(false);
       setApiResults(results);
@@ -135,7 +135,7 @@ export function GuestApp({
   }
 
   const results = apiResults != null ? apiResults : mockResults(search);
-  const searchHint = apiResults != null ? "Spotify catalog" : "Suggestions";
+  const searchHint = apiResults != null ? "Apple Music catalog" : "Suggestions";
 
   function openPaymentIfNeeded() {
     if (tip <= 0) return;
