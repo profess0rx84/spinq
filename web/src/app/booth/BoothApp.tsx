@@ -114,6 +114,10 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
     refetchPlayed();
     refetchSession();
   }
+  async function removeFromQueue(id: string) {
+    await supabase.rpc("remove_queue_item", { p_queue_item_id: id });
+    refetchQueue();
+  }
   async function autoSort() {
     await supabase.rpc("autosort_queue", { p_session_id: currentSessionId });
     refetchSession();
@@ -471,6 +475,13 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
                     className="cursor-pointer rounded-lg border border-accent-40 px-[11px] py-1.5 text-[12px] font-semibold text-accent hover:bg-accent-10"
                   >
                     Play ▸
+                  </div>
+                  <div
+                    onClick={() => removeFromQueue(item.id)}
+                    title="Remove from queue"
+                    className="flex h-[26px] w-[26px] flex-none cursor-pointer items-center justify-center rounded-[7px] border border-border-2 text-[12px] text-white/40 hover:border-red-400/40 hover:text-red-400"
+                  >
+                    ✕
                   </div>
                 </div>
               ))}
