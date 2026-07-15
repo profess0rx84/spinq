@@ -26,7 +26,7 @@ async function getAccessToken(): Promise<string> {
     },
     body: "grant_type=client_credentials",
   });
-  if (!res.ok) throw new Error("Spotify auth failed");
+  if (!res.ok) throw new Error(`Spotify auth failed: ${res.status} ${await res.text()}`);
   const json = await res.json();
   cachedToken = { value: json.access_token, expiresAt: Date.now() + (json.expires_in - 60) * 1000 };
   return cachedToken.value;
@@ -43,11 +43,12 @@ export async function GET(req: NextRequest) {
       { headers: { Authorization: `Bearer ${token}` } }
     );
     if (!res.ok) {
-      return NextResponse.json({ error: "spotify lookup failed" }, { status: 502 });
+      return NextResponse.json({ error: `spotify lookup failed: ${res.status} ${await res.text()}` }, { status: 502 });
     }
     const json = await res.json();
     return NextResponse.json(json, { headers: { "Cache-Control": "s-maxage=300" } });
-  } catch {
-    return NextResponse.json({ error: "spotify lookup failed" }, { status: 502 });
+  } catch (e) {
+    console.error("search route failed", e);
+    return NextResponse.json({ error: "spotify lookup failed", detail: String(e) }, { status: 502 });
   }
 }
