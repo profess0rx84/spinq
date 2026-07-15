@@ -7,6 +7,7 @@ import { sortQueue } from "@/lib/queue";
 import { todayLabel, relativeLabel, dateLabel } from "@/lib/format";
 import { EqBars } from "@/components/EqBars";
 import { SectionLabel } from "@/components/SectionLabel";
+import { QrCode } from "@/components/QrCode";
 import type {
   DjProfile,
   Session,
@@ -122,6 +123,27 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
     router.refresh();
   }
 
+  const [linkOpen, setLinkOpen] = useState(false);
+  const [origin, setOrigin] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    // window is unavailable during the server render of this client
+    // component, so the guest URL can only be read after mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setOrigin(window.location.origin);
+  }, []);
+
+  const guestPath = session ? `/${session.venue_slug}` : "";
+  const guestUrl = origin ? `${origin}${guestPath}` : guestPath;
+  const guestUrlDisplay = guestUrl.replace(/^https?:\/\//, "");
+
+  function copyGuestLink() {
+    navigator.clipboard.writeText(guestUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
+
   if (!session) return null;
   const live = session.is_live;
 
@@ -164,6 +186,44 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
         </div>
         <div className="text-[12.5px] text-text-3">
           {live ? "Guests can send requests" : "Requests are closed for guests"}
+        </div>
+        <div className="relative">
+          <div
+            onClick={() => setLinkOpen((v) => !v)}
+            className="cursor-pointer rounded-[9px] border border-border-3 px-3 py-1.5 text-[12.5px] text-white/65 hover:bg-white/[.06]"
+          >
+            🔗 Guest link
+          </div>
+          {linkOpen && (
+            <div className="absolute left-0 top-[calc(100%+8px)] z-20 flex w-[280px] flex-col gap-3 rounded-[14px] border border-border-2 bg-surface-2 p-4 shadow-[0_12px_40px_rgba(0,0,0,.6)]">
+              <div className="flex items-center justify-between">
+                <SectionLabel>Guest link</SectionLabel>
+                <div onClick={() => setLinkOpen(false)} className="cursor-pointer text-[12px] text-text-3">
+                  close
+                </div>
+              </div>
+              <div className="flex justify-center rounded-xl bg-surface p-3">
+                <QrCode value={guestUrl || "/"} size={140} />
+              </div>
+              <div className="break-all rounded-[10px] bg-bg px-3 py-2.5 text-center font-mono text-[12px] text-text">
+                {guestUrlDisplay}
+              </div>
+              <div
+                onClick={copyGuestLink}
+                className="cursor-pointer rounded-[10px] bg-accent py-2.5 text-center text-[13px] font-bold text-on-accent"
+              >
+                {copied ? "Copied ✓" : "Copy link"}
+              </div>
+              <a
+                href={`${guestPath}/screen`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-center text-[12px] text-text-3 hover:text-text-2"
+              >
+                Open big screen display ↗
+              </a>
+            </div>
+          )}
         </div>
         <div className="ml-auto flex items-center gap-3.5 text-[13px] text-text-2">
           <div>
