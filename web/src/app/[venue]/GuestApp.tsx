@@ -252,7 +252,7 @@ export function GuestApp({
 
       <div className="mx-5 mt-3.5 flex flex-col gap-2.5 rounded-2xl bg-surface p-4">
         <div className="flex items-center gap-2">
-          <EqBars size="md" />
+          <EqBars size="md" active={!!session.now_title} />
           <div className="text-[11px] font-semibold tracking-[.12em] text-accent">NOW PLAYING</div>
         </div>
         <div className="flex flex-col gap-0.5">

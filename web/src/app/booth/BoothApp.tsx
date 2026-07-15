@@ -528,7 +528,7 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
               )}
             </div>
             <div className="flex items-center gap-2.5 border-t border-border px-6 py-3.5 text-[12.5px] text-text-2">
-              <EqBars />
+              <EqBars active={!!session.now_title} />
               Now playing: <span className="font-semibold text-text">{session.now_title ?? "—"}</span>
               {session.now_artist ? ` · ${session.now_artist}` : ""}
               {session.now_title && (
