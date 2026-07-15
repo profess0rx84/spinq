@@ -130,6 +130,11 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
     await supabase.rpc("remove_queue_item", { p_queue_item_id: id });
     refetchQueue();
   }
+  async function clearNowPlaying() {
+    await supabase.rpc("clear_now_playing", { p_session_id: currentSessionId });
+    refetchSession();
+    refetchPlayed();
+  }
   async function autoSort() {
     await supabase.rpc("autosort_queue", { p_session_id: currentSessionId });
     refetchSession();
@@ -526,6 +531,14 @@ export function BoothApp({ profile, initialSession }: { profile: DjProfile; init
               <EqBars />
               Now playing: <span className="font-semibold text-text">{session.now_title ?? "—"}</span>
               {session.now_artist ? ` · ${session.now_artist}` : ""}
+              {session.now_title && (
+                <div
+                  onClick={clearNowPlaying}
+                  className="ml-auto cursor-pointer rounded-[7px] border border-border-3 px-2.5 py-1 text-[11.5px] text-white/60 hover:bg-white/[.06]"
+                >
+                  Clear
+                </div>
+              )}
             </div>
           </div>
         </div>

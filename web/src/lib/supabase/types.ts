@@ -130,6 +130,7 @@ export type Database = {
       toggle_note_approval: { Args: { p_request_id: string }; Returns: boolean };
       play_next: { Args: { p_session_id: string; p_queue_item_id: string }; Returns: void };
       remove_queue_item: { Args: { p_queue_item_id: string }; Returns: void };
+      clear_now_playing: { Args: { p_session_id: string }; Returns: void };
       reorder_queue: { Args: { p_session_id: string; p_queue_item_id: string; p_direction: "up" | "down" }; Returns: void };
       autosort_queue: { Args: { p_session_id: string }; Returns: void };
       set_live: { Args: { p_session_id: string; p_live: boolean }; Returns: void };

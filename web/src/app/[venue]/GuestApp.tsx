@@ -58,6 +58,9 @@ export function GuestApp({
   const [apiResults, setApiResults] = useState<CatalogSong[] | null>(null);
   const [searching, setSearching] = useState(false);
   const [sel, setSel] = useState<Picked | null>(null);
+  const [manualOpen, setManualOpen] = useState(false);
+  const [manualTitle, setManualTitle] = useState("");
+  const [manualArtist, setManualArtist] = useState("");
   const [dedication, setDedication] = useState("");
   const [tip, setTip] = useState(0);
   const [customTipOpen, setCustomTipOpen] = useState(false);
@@ -111,10 +114,20 @@ export function GuestApp({
     setSearch("");
     setApiResults(null);
     setSel(null);
+    setManualOpen(false);
+    setManualTitle("");
+    setManualArtist("");
     setDedication("");
     setTip(0);
     setCustomTipOpen(false);
     setCustomTipValue("");
+  }
+  function useManualEntry() {
+    const title = manualTitle.trim();
+    const artist = manualArtist.trim();
+    if (!title || !artist) return;
+    setSel({ title, artist });
+    setManualOpen(false);
   }
   function closeSheet() {
     setSheetOpen(false);
@@ -362,6 +375,49 @@ export function GuestApp({
               ))}
               {hasQuery && results.length === 0 && !searching && (
                 <div className="py-[26px] text-center text-[13px] text-text-3">No matches — try another search</div>
+              )}
+              {hasQuery && !manualOpen && (
+                <div
+                  onClick={() => {
+                    setManualOpen(true);
+                    setManualTitle(search);
+                  }}
+                  className="cursor-pointer py-3 text-center text-[12px] text-accent"
+                >
+                  Can&apos;t find it? Enter it manually
+                </div>
+              )}
+              {manualOpen && (
+                <div className="mt-1 flex flex-col gap-2.5 rounded-[14px] bg-surface p-3.5">
+                  <input
+                    value={manualTitle}
+                    onChange={(e) => setManualTitle(e.target.value)}
+                    placeholder="Song title"
+                    autoFocus
+                    className="rounded-[10px] bg-bg px-3 py-2.5 text-[13.5px] text-text placeholder:text-text-4"
+                  />
+                  <input
+                    value={manualArtist}
+                    onChange={(e) => setManualArtist(e.target.value)}
+                    placeholder="Artist"
+                    className="rounded-[10px] bg-bg px-3 py-2.5 text-[13.5px] text-text placeholder:text-text-4"
+                  />
+                  <div className="flex gap-2">
+                    <div
+                      onClick={() => setManualOpen(false)}
+                      className="flex-1 cursor-pointer rounded-[10px] border border-border-2 py-2.5 text-center text-[13px] text-white/60"
+                    >
+                      Cancel
+                    </div>
+                    <div
+                      onClick={useManualEntry}
+                      className="flex-1 cursor-pointer rounded-[10px] bg-accent py-2.5 text-center text-[13px] font-bold text-on-accent"
+                      style={{ opacity: manualTitle.trim() && manualArtist.trim() ? 1 : 0.5 }}
+                    >
+                      Use this
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           )}
