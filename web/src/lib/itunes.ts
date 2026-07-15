@@ -21,16 +21,18 @@ export function mockResults(query: string): CatalogSong[] {
   return MOCK_CATALOG.filter((c) => (c.title + " " + c.artist).toLowerCase().includes(q));
 }
 
-// Public, no-key iTunes Search API. Falls back to the mock catalog on
-// failure (offline network, blocked request, etc). Production should swap
-// this for Apple MusicKit or the Spotify Web API — see README.
+// Public, no-key iTunes Search API, called through our own /api/search
+// route rather than directly from the browser — itunes.apple.com doesn't
+// reliably send CORS headers, which mobile Safari enforces strictly and
+// silently fails the fetch. Falls back to the mock catalog on failure
+// (offline network, etc). Production should swap this for Apple MusicKit
+// or the Spotify Web API — see README.
 export async function searchAppleMusic(query: string): Promise<CatalogSong[] | null> {
   try {
-    const res = await fetch(
-      "https://itunes.apple.com/search?media=music&entity=song&limit=8&term=" +
-        encodeURIComponent(query)
-    );
+    const res = await fetch("/api/search?term=" + encodeURIComponent(query));
+    if (!res.ok) return null;
     const json = await res.json();
+    if (!Array.isArray(json.results)) return null;
     return json.results.map((t: { trackName: string; artistName: string; artworkUrl100?: string }) => ({
       title: t.trackName,
       artist: t.artistName,
